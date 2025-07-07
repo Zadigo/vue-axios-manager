@@ -1,8 +1,8 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import { useRequest } from '../src/plugins'
 
 import axios from 'axios'
-import { ref } from 'vue'
 
 const mockAxios = vi.mocked(axios)
 
@@ -211,5 +211,108 @@ describe('Test composables', () => {
     expect(status.value).toBeTypeOf('string')
     expect(status.value).to.equal('idle')
     expect(responseData.value).toBeUndefined()
+  })
+
+  describe('Request Interceptors', () => {
+    it.skip('should add Authorization header when access token exists', () => {
+      const { useCookies } = require('@vueuse/integrations/useCookies.mjs')
+      const mockGet = vi.fn().mockReturnValue('test-token')
+      useCookies.mockReturnValue({ get: mockGet, set: vi.fn() })
+
+      useRequest('testendpoint', '/v1/endpoint', {
+        baseUrl: 'http://example.com'
+      })
+
+      // Get the request interceptor that was registered
+      const requestInterceptorCall = mockAxiosInstance.interceptors.request.use.mock.calls[0]
+      const requestInterceptor = requestInterceptorCall[0]
+
+      const mockRequest = { headers: {} }
+      const result = requestInterceptor(mockRequest)
+
+      expect(mockGet).toHaveBeenCalledWith('access')
+      expect(result.headers.Authorization).toBe('Token test-token')
+    })
+
+    it.skip('should not add Authorization header when no access token', () => {
+      const { useCookies } = require('@vueuse/integrations/useCookies.mjs')
+      const mockGet = vi.fn().mockReturnValue(null)
+      useCookies.mockReturnValue({ get: mockGet, set: vi.fn() })
+
+      useRequest('testendpoint', '/v1/endpoint', {
+        baseUrl: 'http://example.com'
+      })
+
+      const requestInterceptorCall = mockAxiosInstance.interceptors.request.use.mock.calls[0]
+      const requestInterceptor = requestInterceptorCall[0]
+
+      const mockRequest = { headers: {} }
+      const result = requestInterceptor(mockRequest)
+
+      expect(result.headers.Authorization).toBeUndefined()
+    })
+  })
+
+  describe('Edge Cases', () => {
+    it('should handle undefined response data', async () => {
+      const mockResponse = {
+        data: undefined,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { url: '/v1/endpoint' }
+      }
+
+      mockAxiosInstance.get.mockResolvedValue(mockResponse)
+
+      const { execute, responseData } = useRequest('testendpoint', '/v1/endpoint', {
+        baseUrl: 'http://example.com'
+      })
+
+      await execute()
+
+      expect(responseData.value).toBeUndefined()
+    })
+
+    it.skip('should handle network timeout', async () => {
+      const timeoutError = new Error('timeout of 20000ms exceeded')
+      mockAxiosInstance.get.mockRejectedValue(timeoutError)
+
+      const { execute, status } = useRequest('testendpoint', '/v1/endpoint', {
+        baseUrl: 'http://example.com'
+      })
+
+      await execute()
+
+      expect(status.value).toBe('error')
+    })
+  })
+
+  describe('Type Safety', () => {
+    it('should maintain type safety for response data', async () => {
+      interface User {
+        id: number
+        name: string
+      }
+
+      const mockResponse = {
+        data: { id: 1, name: 'John' },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { url: '/v1/users' }
+      }
+
+      mockAxiosInstance.get.mockResolvedValue(mockResponse)
+
+      const { execute, responseData } = useRequest<User>('api', '/v1/users', {
+        baseUrl: 'http://example.com'
+      })
+
+      await execute()
+
+      // TypeScript should infer responseData as Ref<User | undefined>
+      expect(responseData.value).toEqual({ id: 1, name: 'John' })
+    })
   })
 })
