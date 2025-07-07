@@ -1,12 +1,12 @@
 import { useDebounceFn, watchDebounced } from '@vueuse/core'
 import { useCookies } from '@vueuse/integrations/useCookies.mjs'
-import axios, { Axios, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import { computed, getCurrentInstance, inject, ref } from 'vue'
-import { createInternalEndpointName, vueAxiosManager } from './base'
+import { vueAxiosManager } from './base'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpoints, LoginComposableOptions, Methods, RefreshApiResponse, RequestStoreClass } from './types'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpoints, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, RequestStoreClass } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -15,15 +15,18 @@ export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
  * tokens obtained for authenticating the user
  * @param request The request configuration
  */
-function requestInterceptor(request: InternalAxiosRequestConfig) {
-  const { get } = useCookies()
-  const access = get('access')
+function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpoints | null | undefined) {
+  return (request: InternalAxiosRequestConfig) => {
+    const { get } = useCookies()
+    const access = get(endpoint?.accessKey || 'access')
 
-  if (access) {
-    request.headers.Authorization = `Token ${access}`
+    if (access) {
+      const bearer = endpoint?.bearer || options.bearer || 'Token'
+      request.headers.Authorization = `${bearer} ${access}`
+    }
+
+    return request
   }
-
-  return request
 }
 
 /**
@@ -57,8 +60,8 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
           originalRequest._retry = true
 
           try {
-            const accessTokenKey = endpoint?.accessEndpoint || 'access'
-            const refreshTokenKey = endpoint?.refreshEnpoint || 'refresh'
+            const accessTokenKey = endpoint?.accessKey || 'access'
+            const refreshTokenKey = endpoint?.refreshKey || 'refresh'
 
             const { get, set } = useCookies([accessTokenKey, refreshTokenKey])
             const refresh = get<string | undefined>(refreshTokenKey)
@@ -90,58 +93,20 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
  */
 export function useRequest<T>(name: string, path: string, params?: ComposableOptions<T>) {
   const app = getCurrentInstance()
-  console.log('useRequest.app', app)
-  const internalName = createInternalEndpointName(name)
+  const isAppContext = computed(() => app !== null)
 
-  let client: Axios | undefined = app?.appContext.config.globalProperties[internalName]
-  let autoCreatedEndpoint: InternalEnpoints | undefined
+  const endpoint = vueAxiosManager.provideAttr[name]
 
-  console.log('useRequest: app?.appContext.config.globalProperties', app?.appContext.config.globalProperties)
-
-  if (!app) {
-    // Composables should *only* be used in the context
-    // of the setup composition api:
-    // https://vuejs.org/guide/reusability/composables#usage-restrictions
-    // because otherwise we cannot get the app context
-    // however, in case this is called within a function,
-    // create a client that makes the composable stil usable
-    // by forcing the user to specify "baseUrl"
-    if (params?.baseUrl) {
-      client = axios.create({
-        baseURL: params.baseUrl,
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-        timeout: 20000
-      })
-
-      // Create an endpoint for internal tracking
-      autoCreatedEndpoint = {
-        name: `auto-created-${name}`,
-        instance: client,
-        endpointDomain: params.baseUrl,
-        internalName: `$autoCreated${name}Axios`,
-        axios: {
-          withCredentials: true,
-          timeout: 20000
-        }
-      }
-    }
+  if (!endpoint) {
+    throw new Error(`Endpoint with with name ${name} does not exist`)
   }
 
-  console.log('useRequest: appContext', app?.appContext)
-  console.log('useRequest: config', app?.appContext.config)
-  console.log('useRequest: provide', app?.appContext.config.globalProperties)
-  console.log('autoCreatedEndpoint', autoCreatedEndpoint)
-
-  if (!client) {
-    // Since we have nothing to work with, just throw an error
-    throw new Error('UseRequest cannot get app current instance. You need to specify baseUrl')
-  }
+  const client = endpoint.instance
 
   console.log('vueAxiosManager', vueAxiosManager)
 
   try {
-    client.interceptors.request.use(requestInterceptor, requestErrorInterceptor)
+    client.interceptors.request.use(requestInterceptor(vueAxiosManager.pluginOptions, vueAxiosManager.provideAttr[name]), requestErrorInterceptor)
     client.interceptors.response.use(responseInterceptor, responseErrorInterceptor(client.defaults.baseURL, vueAxiosManager.provideAttr[name]))
   } catch (e) {
     // @ts-expect-error Error could be anything so skip
@@ -150,7 +115,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   let store: RequestStoreClass | undefined
 
-  if (app) {
+  if (isAppContext.value) {
     // If we are in the context of a component
     // try to get the store with inject for
     // internal debug tracking
@@ -179,43 +144,41 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
       status.value = 'pending'
 
-      if (client) {
-        if (method === 'get') {
-          response = await client.get(path, { params: params?.query })
-        } else {
-          response = await client[method](path, params?.body)
-        }
-
-        status.value = 'success'
-
-        if (params?.completed) {
-          params.completed(response)
-        }
-
-        console.log('execute.response', response)
-        console.log('execute.store', store)
-
-        if (store) {
-          try {
-            store.registerRequest({
-              name,
-              method,
-              statusText: response.statusText,
-              data: response.data || {},
-              headers: JSON.stringify(response.headers),
-              path: response.config.url
-            })
-          } catch (e) {
-            console.error(e)
-          }
-        }
-
-        console.log('useRequest: status', status.value)
-        console.log('useRequest: responseData.value', responseData.value)
-        console.log('useRequest: response.data', response.data)
-
-        responseData.value = response.data
+      if (method === 'get') {
+        response = await client.get(path, { params: params?.query })
+      } else {
+        response = await client[method](path, params?.body)
       }
+
+      status.value = 'success'
+
+      if (params?.completed) {
+        params.completed(response)
+      }
+
+      console.log('execute.response', response)
+      console.log('execute.store', store)
+
+      if (store) {
+        try {
+          store.registerRequest({
+            name,
+            method,
+            statusText: response.statusText,
+            data: response.data || {},
+            headers: JSON.stringify(response.headers),
+            path: response.config.url
+          })
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      console.log('useRequest: status', status.value)
+      console.log('useRequest: responseData.value', responseData.value)
+      console.log('useRequest: response.data', response.data)
+
+      responseData.value = response.data
     } catch (e) {
       if (e && e instanceof AxiosError) {
         console.log('useRequest: Bubbled up error', e)

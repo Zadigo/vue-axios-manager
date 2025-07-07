@@ -52,6 +52,21 @@ export interface Endpoints {
    * Axios configuration options to pass to the instance
    */
   axios?: InternalAxiosRequestConfig
+  /**
+   * Key to the access token in the storage
+   * @default "access"
+   */
+  accessKey?: string
+  /**
+   * Key to the refresh token in the storage
+   * @default "refresh"
+   */
+  refreshKey?: string
+  /**
+  * The bearer for the autorization token of all instances
+  * @default "Token"
+  */
+  bearer?: string
 }
 
 export interface PluginOptions {
@@ -69,6 +84,11 @@ export interface PluginOptions {
    * Options for the endpoint
    */
   endpoints: Endpoints[]
+  /**
+   * The bearer for the autorization token of this endpoint
+   * @default "Token"
+   */
+  bearer?: string
 }
 
 export type EndpointKeys = keyof Endpoints

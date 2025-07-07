@@ -13,7 +13,7 @@ import type { Endpoints, InternalEnpoints, PluginOptions } from './types'
 class VueAxiosManager implements VueAxiosManager {
   public pluginOptions: PluginOptions | undefined
   public endpoints: InternalEnpoints[] | undefined
-  public provideAttr: Record<string, InternalEnpoints>
+  public provideAttr: Record<string, InternalEnpoints | undefined>
 
   constructor() {
     this.pluginOptions = undefined
