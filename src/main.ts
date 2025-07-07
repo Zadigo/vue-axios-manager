@@ -16,7 +16,8 @@ app.use(createApiManager({
   endpoints: [
     {
       name: 'quart',
-      domain: import.meta.env.VITE_QUART_DEV
+      domain: import.meta.env.VITE_QUART_DEV,
+      port: '5000'
     }
   ]
 }))

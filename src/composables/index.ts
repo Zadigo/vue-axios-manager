@@ -6,7 +6,7 @@ export function useTestComposable() {
   console.log('useTestComposable.app', app)
 
   function testFunction() {
-    // Do something
+    console.log('useTestComposable.testFunction.app', app)
   }
 
   return {

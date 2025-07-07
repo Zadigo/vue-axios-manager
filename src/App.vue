@@ -1,22 +1,46 @@
 <template>
-  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <button class="btn btn-primary btn-rounded btn-block" @click="testInFunction">
+              Test composable in function
+            </button>
+
+            <button class="btn btn-primary btn-rounded btn-block" @click="testExecuteInFunction">
+              Test execute in function
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <TestComposables />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useComments } from './stores'
-import { onMounted } from 'vue'
-import { useAnotherTestComposable, useTestComposable } from './composables'
-import { storeToRefs } from 'pinia'
+import { useRequest } from './plugins'
 
-useTestComposable()
-const { testFunction } = useAnotherTestComposable()
+import TestComposables from './components/TestComposables.vue'
 
-const store = useComments()
-const { comments } = storeToRefs(store)
+/**
+ * Normal usage
+ */
+const { execute } = useRequest('quart', '/v1/test')
 
-onMounted(() => {
-  testFunction()
+async function testExecuteInFunction() {
+  await execute()
+}
 
-  console.log('comments', comments)
-})
+/**
+ * Abnormal usage: we are obliged to specify the "baseUrl"
+ */
+async function testInFunction() {
+  const { execute } = useRequest('quart', '/v1/test')
+  await execute()
+}
 </script>

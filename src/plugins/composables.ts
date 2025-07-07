@@ -95,10 +95,13 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   console.log('useRequest: app?.appContext.config.globalProperties', app?.appContext.config.globalProperties)
 
   if (!app) {
-    // If the composable is used store for example, the app current
-    // instance is "undefined" and so as the "client". The use thus has to
-    // use the fallback baseUrl in order to auto-create a usable client for
-    // this specific context
+    // Composables should *only* be used in the context
+    // of the setup composition api: 
+    // https://vuejs.org/guide/reusability/composables#usage-restrictions
+    // because otherwise we cannot get the app context
+    // however, in case this is called within a function,
+    // create a client that makes the composable stil usable
+    // by forcing the user to specify "baseUrl"
     if (params?.baseUrl) {
       client = axios.create({
         baseURL: params.baseUrl,
