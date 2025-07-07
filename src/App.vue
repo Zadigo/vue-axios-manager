@@ -26,6 +26,10 @@
           <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="() => count += 1">
             Test with watch
           </button>
+
+          <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="requestProtected">
+            Test protected
+          </button>
         </div>
       </div>
 
@@ -83,8 +87,9 @@ async function testInFunction() {
 }
 
 const count = ref<number>(1)
-
 const { responseData: watchedResponse } = useRequest('quart', '/v1/test', {
   watch: count
 })
+
+const { execute: requestProtected } = useRequest('quart', '/v1/protected')
 </script>
