@@ -18,6 +18,8 @@ export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpointOptions | null | undefined) {
   return (request: InternalAxiosRequestConfig) => {
     const { get } = useCookies()
+
+    const bearer = endpoint?.bearer || options?.bearer || 'Token'
     const access = get(endpoint?.accessKey || 'access')
 
     if (access) {
@@ -104,16 +106,6 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   const client = endpoint.instance
 
   console.log('vueAxiosManager', vueAxiosManager)
-
-  // baseUrl allows the user to override
-  // the initial client entirely for this
-  // request -; this creates a new client
-  if (params?.baseUrl) {
-    client = axios.create({
-      baseURL: params.baseUrl, // We allow http or https protocoles here
-      ...endpoint.axios
-    })
-  }
 
   try {
     client.interceptors.request.use(requestInterceptor(vueAxiosManager.pluginOptions, vueAxiosManager.provideAttr[name]), requestErrorInterceptor)
