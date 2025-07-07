@@ -96,7 +96,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   if (!app) {
     // Composables should *only* be used in the context
-    // of the setup composition api: 
+    // of the setup composition api:
     // https://vuejs.org/guide/reusability/composables#usage-restrictions
     // because otherwise we cannot get the app context
     // however, in case this is called within a function,

@@ -48,6 +48,8 @@ export function createAxiosInstance(endpoint: Endpoints): InternalEnpoints {
     }
   }
 
+  console.log('createAxiosInstance.baseDomain', baseDomain)
+
   const instance = axios.create({
     baseURL: baseDomain,
     headers: { 'Content-Type': 'application/json' },
