@@ -56,8 +56,6 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
     ...axiosOptions
   })
 
-  console.log('instance.defaults', instance.defaults)
-
   return {
     ...endpoint,
     internalName: createInternalEndpointName(endpoint.name),

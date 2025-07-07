@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createAxiosInstance, createInternalEndpointName, inProduction } from '../src/plugins'
+import { createAxiosInstance, createInternalEndpointName, inProduction, PluginOptions } from '../src/plugins'
 import axios from 'axios'
 // import {  } from 'node:inspector'
 
@@ -30,8 +30,16 @@ describe('utility functions', () => {
 })
 
 describe('Create Axios Instance', () => {
+  const pluginOptions: PluginOptions = {
+    endpoints: [
+      {
+        name: 'myendpoint'
+      }
+    ]
+  }
+
   it('create axios instance should return endpoint configuration', () => {
-    const endpoint = createAxiosInstance({ name: 'myendpoint' })
+    const endpoint = createAxiosInstance(pluginOptions, pluginOptions.endpoints[0])
   
     expect(endpoint).toBeTypeOf('object')
 
@@ -47,7 +55,7 @@ describe('Create Axios Instance', () => {
     const originalNodeEnv = process.env.NODE_ENV
 
     vi.stubEnv('NODE_ENV', 'production')
-    createAxiosInstance({ name: 'myendpoint' })
+    createAxiosInstance(pluginOptions, pluginOptions.endpoints[0])
     vi.stubEnv('NODE_ENV', originalNodeEnv)
   })
 })
