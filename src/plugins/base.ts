@@ -35,10 +35,13 @@ export function createInternalEndpointName(name: string) {
  */
 export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endpoints): InternalEnpoints {
   // const loc = endpoint.https ? 'https': 'http'
-  const devDomain = endpoint.dev || '127.0.0.1'
-  const port = endpoint.port || '8000'
+  const devDomain = endpoint.dev || `127.0.0.1:${endpoint.port || 8000}`
 
-  let baseDomain: string = `http://${devDomain}:${port}`
+  if (devDomain.startsWith('http')) {
+    throw new Error(`Endpoint "${endpoint}" should not start with "http" or "https"`)
+  }
+
+  let baseDomain: string = `http://${devDomain}`
 
   if (inProduction()) {
     if (!endpoint.domain) {

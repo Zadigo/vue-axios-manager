@@ -19,12 +19,12 @@ export interface Endpoints {
    */
   label?: string
   /**
-   * The development domain
-   * @default "http://127.0.0.1"
+   * Default development domain
+   * @default "127.0.0.1"
    */
   dev?: string
   /**
-   * The development port
+   * Port for the default development domain
    * @default 8000
    */
   port?: string

@@ -45,7 +45,6 @@ describe('Create Axios Instance', () => {
 
     // expect(endpoint.instance).toBeInstanceOf(axios.Axios)
     expect(endpoint.internalName).toBeDefined()
-    expect(endpoint.port).toBeUndefined()
     expect(endpoint.dev).toBeUndefined()
     expect(endpoint.endpointDomain).toEqual('http://127.0.0.1:8000')
     expect(endpoint.internalName).toEqual(createInternalEndpointName('myendpoint'))
