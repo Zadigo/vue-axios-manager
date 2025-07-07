@@ -17,7 +17,19 @@ app.use(createApiManager({
     {
       name: 'quart',
       dev: import.meta.env.VITE_QUART_DEV,
-      port: '5000'
+      port: '5000',
+      domain: 'http://example.com',
+      https: false,
+      accessEndpoint: '/v1/token',
+      refreshEnpoint: '/v1/refresh',
+      label: 'MyLabel',
+      axios: {
+        withCredentials: true,
+        timeout: 20000,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
     }
   ]
 }))

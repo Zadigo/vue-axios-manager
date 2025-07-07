@@ -33,7 +33,7 @@ export function createInternalEndpointName(name: string) {
  * ```
  * @internal
  */
-export function createAxiosInstance(endpoint: Endpoints): InternalEnpoints {
+export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endpoints): InternalEnpoints {
   // const loc = endpoint.https ? 'https': 'http'
   const devDomain = endpoint.dev || '127.0.0.1'
   const port = endpoint.port || '8000'
@@ -50,12 +50,13 @@ export function createAxiosInstance(endpoint: Endpoints): InternalEnpoints {
 
   console.log('createAxiosInstance.baseDomain', baseDomain)
 
+  const axiosOptions = pluginOptions.axios || endpoint.axios || {}
   const instance = axios.create({
     baseURL: baseDomain,
-    headers: { 'Content-Type': 'application/json' },
-    timeout: 20000,
-    withCredentials: true
+    ...axiosOptions
   })
+
+  console.log('instance.defaults', instance.defaults)
 
   return {
     ...endpoint,
@@ -73,7 +74,7 @@ export function createApiManager(options: PluginOptions): Plugin {
   return {
     install(app) {
       const internalEndpointOptions = options.endpoints.map((endpointOptions) => {
-        const result = createAxiosInstance(endpointOptions)
+        const result = createAxiosInstance(options, endpointOptions)
         app.config.globalProperties[result.internalName] = result.instance
         return result
       })

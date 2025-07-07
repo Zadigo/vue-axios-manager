@@ -55,6 +55,16 @@ export interface Endpoints {
 
 export interface PluginOptions {
   /**
+   * Global Axios settings for all instances
+   * @description Will override all individual axios endpoint settings
+   */
+  axios?: InternalAxiosRequestConfig
+  /**
+   * Global to implement for all instances
+   * @default 20000
+   */
+  timeout?: number
+  /**
    * Options for the endpoint
    */
   endpoints: Endpoints[]
