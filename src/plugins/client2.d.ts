@@ -1,10 +1,10 @@
-import type { InternalEnpoints } from './types'
+import type { InternalEnpointOptions } from './types'
 
 declare module 'vue' {
   interface GlobalComponents { }
   
   export interface ComponentCustomProperties {
-    $axiosEndpoints: Record<string, InternalEnpoints>
+    $axiosEndpoints: Record<string, InternalEnpointOptions>
   }
 }
 

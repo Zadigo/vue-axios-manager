@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { setupAxiosManagerDevtools, RequestStore } from './devtools'
 
 import type { Plugin } from 'vue'
-import type { Endpoints, InternalEnpoints, PluginOptions } from './types'
+import type { EndpointOptions, InternalEnpointOptions, PluginOptions } from './types'
 
 /**
  * Manager that centralizes the different options
@@ -12,8 +12,8 @@ import type { Endpoints, InternalEnpoints, PluginOptions } from './types'
  */
 class VueAxiosManager implements VueAxiosManager {
   public pluginOptions: PluginOptions | undefined
-  public endpoints: InternalEnpoints[] | undefined
-  public provideAttr: Record<string, InternalEnpoints | undefined>
+  public endpoints: InternalEnpointOptions[] | undefined
+  public provideAttr: Record<string, InternalEnpointOptions | undefined>
 
   constructor() {
     this.pluginOptions = undefined
@@ -48,7 +48,7 @@ export function createInternalEndpointName(name: string) {
  * @param endpoint The endpoint configuration options
  * @internal
  */
-function checkDomain(domain: string, endpoint: Endpoints) {
+function checkDomain(domain: string, endpoint: EndpointOptions) {
   if (domain.startsWith('http')) {
     throw new Error(`Endpoint "${endpoint.name}" should not start with "http" or "https"`)
   }
@@ -65,7 +65,7 @@ function checkDomain(domain: string, endpoint: Endpoints) {
  * ```
  * @internal
  */
-export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endpoints): InternalEnpoints {
+export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: EndpointOptions): InternalEnpointOptions {
   // const loc = endpoint.https ? 'https': 'http'
   const loc = endpoint.https ? 'https' : 'http'
   const devDomain = endpoint.dev || `127.0.0.1:${endpoint.port || 8000}`
@@ -112,7 +112,7 @@ export function createApiManager(options: PluginOptions): Plugin {
         return result
       })
 
-      const provideAttr: Record<string, InternalEnpoints> = {}
+      const provideAttr: Record<string, InternalEnpointOptions> = {}
       internalEndpointOptions.forEach((endpoint) => {
         provideAttr[endpoint.name] = endpoint
       })

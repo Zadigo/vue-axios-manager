@@ -6,7 +6,7 @@ import { vueAxiosManager } from './base'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpoints, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, RequestStoreClass } from './types'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, RequestStoreClass } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -15,7 +15,7 @@ export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
  * tokens obtained for authenticating the user
  * @param request The request configuration
  */
-function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpoints | null | undefined) {
+function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpointOptions | null | undefined) {
   return (request: InternalAxiosRequestConfig) => {
     const { get } = useCookies()
     const access = get(endpoint?.accessKey || 'access')
@@ -50,7 +50,7 @@ async function responseInterceptor(response: AxiosResponse) {
  * access tokens created via authentication for users
  * @param domain The url domain for the request
  */
-function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpoints | null | undefined) {
+function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpointOptions | null | undefined) {
   return async (error: unknown) => {
     if (error && error instanceof AxiosError) {
       if (error.response) {

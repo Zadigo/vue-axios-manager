@@ -7,7 +7,19 @@ export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequest
 
 type InternalAxiosRequestConfig = Omit<AxiosRequestConfig, 'baseURL' | 'data' | 'params' | 'method' | 'url'>
 
-export interface Endpoints {
+interface SharedOptions {
+  /**
+   * Axios configuration options to pass to the instance
+   */
+  axios?: InternalAxiosRequestConfig
+  /**
+   * The bearer for the autorization token of this endpoint
+   * @default "Token"
+   */
+  bearer?: string
+}
+
+export interface EndpointOptions extends SharedOptions {
   /**
    * Endpoint name
    */
@@ -49,10 +61,6 @@ export interface Endpoints {
    */
   https?: boolean
   /**
-   * Axios configuration options to pass to the instance
-   */
-  axios?: InternalAxiosRequestConfig
-  /**
    * Key to the access token in the storage
    * @default "access"
    */
@@ -62,19 +70,9 @@ export interface Endpoints {
    * @default "refresh"
    */
   refreshKey?: string
-  /**
-  * The bearer for the autorization token of all instances
-  * @default "Token"
-  */
-  bearer?: string
 }
 
-export interface PluginOptions {
-  /**
-   * Global Axios settings for all instances
-   * @description Will override all individual axios endpoint settings
-   */
-  axios?: InternalAxiosRequestConfig
+export interface PluginOptions extends SharedOptions {
   /**
    * Global to implement for all instances
    * @default 20000
@@ -83,20 +81,15 @@ export interface PluginOptions {
   /**
    * Options for the endpoint
    */
-  endpoints: Endpoints[]
-  /**
-   * The bearer for the autorization token of this endpoint
-   * @default "Token"
-   */
-  bearer?: string
+  endpoints: EndpointOptions[]
 }
 
-export type EndpointKeys = keyof Endpoints
+export type EndpointOptionKeys = keyof EndpointOptions
 
 /**
  * @description For internal use
  */
-export interface InternalEnpoints extends Endpoints {
+export interface InternalEnpointOptions extends EndpointOptions {
   /**
    * Name used to identify the endpoint in
    * Vue's globalProperties
@@ -113,7 +106,7 @@ export interface InternalEnpoints extends Endpoints {
   instance: Axios
 }
 
-export type InternalEndpointsKeys = keyof InternalEnpoints
+export type InternalEndpointOptionKeys = keyof InternalEnpointOptions
 
 export interface ComposableOptions<T> {
   /**
@@ -193,6 +186,7 @@ export interface Credentials extends Record<string, string | undefined> {
 
 /**
  * Container for the requests sent
+ * @internal
  */
 export interface RequestsContainer {
   name: string
@@ -257,8 +251,11 @@ export interface RefreshApiResponse {
   access: string
 }
 
+/**
+ * @internal
+ */
 export interface VueAxiosManager {
   pluginOptions: PluginOptions | undefined
-  endpoints: InternalEnpoints[] | undefined
-  provider: Record<string, InternalEnpoints>
+  endpoints: InternalEnpointOptions[] | undefined
+  provider: Record<string, InternalEnpointOptions>
 }

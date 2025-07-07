@@ -1,7 +1,7 @@
 import { setupDevtoolsPlugin } from '@vue/devtools-api'
 
 import type { App } from 'vue'
-import type { _DevtoolsTimelineObject, InternalEndpointsKeys, InternalEnpoints, PluginOptions, RequestsContainer, RequestStoreClass } from './types'
+import type { _DevtoolsTimelineObject, InternalEndpointOptionKeys, InternalEnpointOptions, PluginOptions, RequestsContainer, RequestStoreClass } from './types'
 
 const inspectorId = 'axios-manager'
 const timelineLayerId = 'axios-manager'
@@ -16,9 +16,9 @@ export class RequestStore implements RequestStoreClass {
   public api
   private pluginOptions: PluginOptions
   public container: RequestsContainer[]
-  public internalEndpoints: InternalEnpoints[]
+  public internalEndpoints: InternalEnpointOptions[]
 
-  constructor(app: App, pluginOptions: PluginOptions, internalEndpoints: InternalEnpoints[]) {
+  constructor(app: App, pluginOptions: PluginOptions, internalEndpoints: InternalEnpointOptions[]) {
     this.app = app
     this.pluginOptions = pluginOptions
     this.container = []
@@ -58,7 +58,7 @@ export class RequestStore implements RequestStoreClass {
     console.log('RequestStore: : option', option)
 
     if (option) {
-      const keys = Object.keys(option) as InternalEndpointsKeys[]
+      const keys = Object.keys(option) as InternalEndpointOptionKeys[]
 
       console.log('option', option, keys)
 
