@@ -30,6 +30,11 @@ app.use(createApiManager({
           'Content-Type': 'application/json'
         }
       }
+    },
+    {
+      name: 'comments',
+      dev: 'jsonplaceholder.typicode.com',
+      https: true
     }
   ]
 }))

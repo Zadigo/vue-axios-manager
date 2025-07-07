@@ -11,7 +11,7 @@
 import { onMounted } from 'vue'
 import { useAsyncRequest } from '../plugins'
 
-const { debouncedExecute, responseData } = await useAsyncRequest('quart', '/v1/test', {
+const { debouncedExecute, responseData } = await useAsyncRequest('comments', '/todos/1', {
   debounce: 10000
 })
 

@@ -30,6 +30,7 @@ export interface Endpoints {
   port?: string
   /**
    * The production domain
+   * @example "example.com"
    */
   domain?: string
   /**
@@ -43,7 +44,7 @@ export interface Endpoints {
    */
   refreshEnpoint?: string
   /**
-   * Whether to use https for this endpoint
+   * Whether to use https for the development endpoint
    * @default false
    */
   https?: boolean

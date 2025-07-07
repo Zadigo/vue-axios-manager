@@ -23,6 +23,19 @@ export function createInternalEndpointName(name: string) {
 }
 
 /**
+ * Helper function used to check that the domain does not
+ * have a protocol (http, https) and does not have a host
+ * @param domain The domain to check
+ * @param endpoint The endpoint configuration options
+ * @internal
+ */
+function checkDomain(domain: string, endpoint: Endpoints) {
+  if (domain.startsWith('http')) {
+    throw new Error(`Endpoint "${endpoint.name}" should not start with "http" or "https"`)
+  }
+}
+
+/**
  * Creates a new axios instance with the provided name
  * @param endpoint Endpoint for which the instance should be create
  * @example
@@ -35,19 +48,19 @@ export function createInternalEndpointName(name: string) {
  */
 export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endpoints): InternalEnpoints {
   // const loc = endpoint.https ? 'https': 'http'
+  const loc = endpoint.https ? 'https' : 'http'
   const devDomain = endpoint.dev || `127.0.0.1:${endpoint.port || 8000}`
 
-  if (devDomain.startsWith('http')) {
-    throw new Error(`Endpoint "${endpoint}" should not start with "http" or "https"`)
-  }
+  checkDomain(devDomain, endpoint)
 
-  let baseDomain: string = `http://${devDomain}`
+  let baseDomain: string = `${loc}://${devDomain}`
 
   if (inProduction()) {
     if (!endpoint.domain) {
       throw new Error(`You need to set domain for "${endpoint.name}" endpoint for production environments`)
     } else {
       baseDomain = endpoint.domain
+      checkDomain(baseDomain, endpoint)
     }
   }
 
