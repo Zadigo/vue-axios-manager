@@ -105,6 +105,16 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   console.log('vueAxiosManager', vueAxiosManager)
 
+  // baseUrl allows the user to override
+  // the initial client entirely for this
+  // request -; this creates a new client
+  if (params?.baseUrl) {
+    client = axios.create({
+      baseURL: params.baseUrl, // We allow http or https protocoles here
+      ...endpoint.axios
+    })
+  }
+
   try {
     client.interceptors.request.use(requestInterceptor(vueAxiosManager.pluginOptions, vueAxiosManager.provideAttr[name]), requestErrorInterceptor)
     client.interceptors.response.use(responseInterceptor, responseErrorInterceptor(client.defaults.baseURL, vueAxiosManager.provideAttr[name]))
