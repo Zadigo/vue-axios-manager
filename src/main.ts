@@ -21,7 +21,7 @@ app.use(createApiManager({
       domain: 'http://example.com',
       https: false,
       accessEndpoint: '/v1/token',
-      refreshEnpoint: '/v1/refresh',
+      refreshEnpoint: '/v1/refresh-token',
       label: 'MyLabel',
       axios: {
         withCredentials: true,

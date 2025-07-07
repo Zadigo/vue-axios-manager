@@ -2,7 +2,7 @@ import { useDebounceFn, watchDebounced } from '@vueuse/core'
 import { useCookies } from '@vueuse/integrations/useCookies.mjs'
 import axios, { Axios, AxiosError } from 'axios'
 import { computed, getCurrentInstance, inject, ref } from 'vue'
-import { createInternalEndpointName } from './base'
+import { createInternalEndpointName, vueAxiosManager } from './base'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { Ref } from 'vue'
@@ -47,7 +47,7 @@ async function responseInterceptor(response: AxiosResponse) {
  * access tokens created via authentication for users
  * @param domain The url domain for the request
  */
-function responseErrorInterceptor(domain: string | undefined) {
+function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpoints | null | undefined) {
   return async (error: unknown) => {
     if (error && error instanceof AxiosError) {
       if (error.response) {
@@ -57,15 +57,19 @@ function responseErrorInterceptor(domain: string | undefined) {
           originalRequest._retry = true
 
           try {
-            const { get, set } = useCookies(['access', 'refresh'])
-            const refresh = get<string | undefined>('refresh')
+            const accessTokenKey = endpoint?.accessEndpoint || 'access'
+            const refreshTokenKey = endpoint?.refreshEnpoint || 'refresh'
+
+            const { get, set } = useCookies([accessTokenKey, refreshTokenKey])
+            const refresh = get<string | undefined>(refreshTokenKey)
 
             console.log('responseErrorInterceptor: Refresh', refresh)
 
             const refreshClient = axios.create({ baseURL: domain })
-            const response = await refreshClient.post<RefreshApiResponse>('/auth/v1/token/refresh/', { refresh })
+            const refreshTokenEndpoint = endpoint?.refreshEnpoint || '/auth/v1/token/refresh/'
+            const response = await refreshClient.post<RefreshApiResponse>(refreshTokenEndpoint, { refresh })
 
-            set('access', response.data.access, { secure: true, sameSite: 'strict' })
+            set(accessTokenKey, response.data.access, { secure: true, sameSite: 'strict' })
 
             return refreshClient
           } catch (refreshError) {
@@ -90,7 +94,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   const internalName = createInternalEndpointName(name)
 
   let client: Axios | undefined = app?.appContext.config.globalProperties[internalName]
-  let endpoint: InternalEnpoints | undefined
+  let autoCreatedEndpoint: InternalEnpoints | undefined
 
   console.log('useRequest: app?.appContext.config.globalProperties', app?.appContext.config.globalProperties)
 
@@ -111,30 +115,37 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
       })
 
       // Create an endpoint for internal tracking
-      endpoint = {
+      autoCreatedEndpoint = {
         name: `auto-created-${name}`,
         instance: client,
         endpointDomain: params.baseUrl,
-        internalName: `$auto-create-${name}`
+        internalName: `$autoCreated${name}Axios`,
+        axios: {
+          withCredentials: true,
+          timeout: 20000
+        }
       }
     }
-  } else {
-    console.log('useRequest: appContext', app.appContext)
-    console.log('useRequest: config', app.appContext.config)
-    console.log('useRequest: provide', app.appContext.config.globalProperties)
-    console.log(endpoint)
   }
+
+  console.log('useRequest: appContext', app?.appContext)
+  console.log('useRequest: config', app?.appContext.config)
+  console.log('useRequest: provide', app?.appContext.config.globalProperties)
+  console.log('autoCreatedEndpoint', autoCreatedEndpoint)
 
   if (!client) {
     // Since we have nothing to work with, just throw an error
     throw new Error('UseRequest cannot get app current instance. You need to specify baseUrl')
   }
 
+  console.log('vueAxiosManager', vueAxiosManager)
+
   try {
     client.interceptors.request.use(requestInterceptor, requestErrorInterceptor)
-    client.interceptors.response.use(responseInterceptor, responseErrorInterceptor(client.defaults.baseURL))
-  } catch {
-    throw new Error(`Api client name "${name}" does not exist`)
+    client.interceptors.response.use(responseInterceptor, responseErrorInterceptor(client.defaults.baseURL, vueAxiosManager.provideAttr[name]))
+  } catch (e) {
+    // @ts-expect-error Error could be anything so skip
+    throw new Error(e)
   }
 
   let store: RequestStoreClass | undefined

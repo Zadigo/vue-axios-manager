@@ -236,3 +236,9 @@ export interface RequestStoreClass {
 export interface RefreshApiResponse {
   access: string
 }
+
+export interface VueAxiosManager {
+  pluginOptions: PluginOptions | undefined
+  endpoints: InternalEnpoints[] | undefined
+  provider: Record<string, InternalEnpoints>
+}

@@ -6,6 +6,25 @@ import type { Plugin } from 'vue'
 import type { Endpoints, InternalEnpoints, PluginOptions } from './types'
 
 /**
+ * Manager that centralizes the different options
+ * of the application for different functions
+ * @internal
+ */
+class VueAxiosManager implements VueAxiosManager {
+  public pluginOptions: PluginOptions | undefined
+  public endpoints: InternalEnpoints[] | undefined
+  public provideAttr: Record<string, InternalEnpoints>
+
+  constructor() {
+    this.pluginOptions = undefined
+    this.endpoints = undefined
+    this.provideAttr = {}
+  }
+}
+
+export const vueAxiosManager = new VueAxiosManager()
+
+/**
  * Checks whether the application in prodcution
  */
 export function inProduction(): boolean {
@@ -97,6 +116,10 @@ export function createApiManager(options: PluginOptions): Plugin {
       internalEndpointOptions.forEach((endpoint) => {
         provideAttr[endpoint.name] = endpoint
       })
+
+      vueAxiosManager.provideAttr = provideAttr
+      vueAxiosManager.pluginOptions = options
+      vueAxiosManager.endpoints = internalEndpointOptions
 
       app.mixin({
         provide: {

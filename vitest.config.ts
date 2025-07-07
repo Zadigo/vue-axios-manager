@@ -15,6 +15,10 @@ export default defineConfig({
     setupFiles: 'tests/vitest.setup.ts',
     alias: {
       '@': path.resolve(__dirname, 'src')
-    }
+    },
+    exclude: [
+      '**/src/index.ts',
+      '**/*.test-d.ts'
+    ]
   }
 })

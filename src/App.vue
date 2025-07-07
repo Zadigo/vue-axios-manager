@@ -7,6 +7,10 @@
             {{ watchedResponse }}
           </div>
 
+          <div class="alert alert-success">
+            Pinia store: {{ store.comments }}
+          </div>
+
           <div class="alert alert-warning">
             {{ normalUsageData }}
           </div>
@@ -29,6 +33,10 @@
 
           <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="requestProtected">
             Test protected
+          </button>
+
+          <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="store.handleComments()">
+            Test from Pinia
           </button>
         </div>
       </div>
@@ -60,6 +68,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from 'vue'
 import { useRequest } from './plugins'
+import { useComments } from './stores'
 
 const AsyncWithSuspense = defineAsyncComponent({
   loader: () => import('./components/WithSuspense.vue')
@@ -92,4 +101,6 @@ const { responseData: watchedResponse } = useRequest('quart', '/v1/test', {
 })
 
 const { execute: requestProtected } = useRequest('quart', '/v1/protected')
+
+const store = useComments()
 </script>

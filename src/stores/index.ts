@@ -1,14 +1,21 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useAnotherTestComposable } from '../composables'
+import { useRequest } from '../plugins'
 
 export const useComments = defineStore('comments', () => {
-  const comments = ref<string[]>([])
+  const comments = ref<object[]>([])
 
-  const { testFunction } = useAnotherTestComposable()
+  async function handleComments() {
+    const { execute, responseData } = useRequest('quart', '/v1/test')
+    execute()
+
+    if (responseData.value) {
+      comments.value = responseData.value
+    }
+  }
 
   return {
-    testFunction,
+    handleComments,
     comments
   }
 })
