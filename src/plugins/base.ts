@@ -9,7 +9,7 @@ import type { Endpoints, InternalEnpoints, PluginOptions } from './types'
  * Checks whether the application in prodcution
  */
 export function inProduction(): boolean {
-  return process.env.NODE_ENV !== 'development'
+  return process.env.NODE_ENV === 'production'
 }
 
 /**
@@ -23,15 +23,17 @@ export function createInternalEndpointName(name: string) {
 }
 
 /**
- * @param endpoint Creates a new axios instance with the provided name
+ * Creates a new axios instance with the provided name
+ * @param endpoint Endpoint for which the instance should be create
  * @example
  * ```js
  * const result = createAxiosInstance({ name: 'companies' })
  * console.log(result)
  * { name: "companiesAxios", instance: Axios }
  * ```
+ * @internal
  */
-function createAxiosInstance(endpoint: Endpoints): InternalEnpoints {
+export function createAxiosInstance(endpoint: Endpoints): InternalEnpoints {
   // const loc = endpoint.https ? 'https': 'http'
   const devDomain = endpoint.dev || '127.0.0.1'
   const port = endpoint.port || '8000'
@@ -40,7 +42,7 @@ function createAxiosInstance(endpoint: Endpoints): InternalEnpoints {
 
   if (inProduction()) {
     if (!endpoint.domain) {
-      throw new Error('You need to set domain in createApiManager in production')
+      throw new Error(`You need to set domain for "${endpoint.name}" endpoint for production environments`)
     } else {
       baseDomain = endpoint.domain
     }
@@ -74,22 +76,21 @@ export function createApiManager(options: PluginOptions): Plugin {
         return result
       })
 
-      if (process.env.NODE_ENV === 'development') {
+      const provideAttr: Record<string, InternalEnpoints> = {}
+      internalEndpointOptions.forEach((endpoint) => {
+        provideAttr[endpoint.name] = endpoint
+      })
+
+      app.mixin({
+        provide: {
+          $axiosEndpoints: reactive(provideAttr)
+        }
+      })
+
+      if (!inProduction()) {
         const store = new RequestStore(app, options, internalEndpointOptions)
 
         app.provide('requestStore', store)
-
-        const provideAttr: Record<string, InternalEnpoints> = {}
-        internalEndpointOptions.forEach((endpoint) => {
-          provideAttr[endpoint.name] = endpoint
-        })
-
-        app.mixin({
-          provide: {
-            $axiosEndpoints: reactive(provideAttr)
-          }
-        })
-
         setupAxiosManagerDevtools(app, store)
       }
     }

@@ -19,8 +19,8 @@ export interface Endpoints {
    */
   label?: string
   /**
-   * The development domain name
-   * @default "http:127.0.0.1"
+   * The development domain
+   * @default "http://127.0.0.1"
    */
   dev?: string
   /**

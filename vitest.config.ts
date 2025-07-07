@@ -8,10 +8,11 @@ export default defineConfig({
     vue()
   ],
   test: {
-    include: ['tests/**/*.{spec}.ts'],
+    include: ['**/*.{spec,test}.ts'],
     coverage: {
       enabled: true
     },
+    setupFiles: 'tests/vitest.setup.ts',
     alias: {
       '@': path.resolve(__dirname, 'src')
     }
