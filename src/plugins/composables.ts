@@ -23,7 +23,6 @@ function requestInterceptor(options: PluginOptions | undefined, endpoint: Intern
     const access = get(endpoint?.accessKey || 'access')
 
     if (access) {
-      const bearer = endpoint?.bearer || options.bearer || 'Token'
       request.headers.Authorization = `${bearer} ${access}`
     }
 
@@ -103,9 +102,19 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
     throw new Error(`Endpoint with with name ${name} does not exist`)
   }
 
-  const client = endpoint.instance
+  let client = endpoint.instance
 
   console.log('vueAxiosManager', vueAxiosManager)
+
+  // baseUrl allows the user to override
+  // the initial client entirely for this
+  // request -; this creates a new client
+  if (params?.baseUrl) {
+    client = axios.create({
+      baseURL: params.baseUrl, // We allow http or https protocoles here
+      ...endpoint.axios
+    })
+  }
 
   try {
     client.interceptors.request.use(requestInterceptor(vueAxiosManager.pluginOptions, vueAxiosManager.provideAttr[name]), requestErrorInterceptor)
