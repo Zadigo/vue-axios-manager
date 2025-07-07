@@ -1,15 +1,13 @@
 <template>
-  <div class="container">
-    <div class="card">
-      <div class="card-body">
-        <button class="btn btn-warning btn-rounded btn-block" @click="testFunction">
-          In setup
-        </button>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <button class="btn btn-warning btn-rounded btn-block" @click="testFunction">
+        In setup
+      </button>
 
-        <button class="btn btn-warning btn-rounded btn-block" @click="testInFunction">
-          In function
-        </button>
-      </div>
+      <button class="btn btn-warning btn-rounded btn-block" @click="testInFunction">
+        In function
+      </button>
     </div>
   </div>
 </template>

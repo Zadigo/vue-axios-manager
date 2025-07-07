@@ -156,6 +156,8 @@ describe('Test composables', () => {
       await execute()
 
       expect(completed).toHaveBeenCalledWith(mockResponse)
+      // TODO: completed should *always* return something ??
+      // expect(completed).toReturnWith(mockResponse.data)
     })
 
     it('should handle different HTTP methods', async () => {
