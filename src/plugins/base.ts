@@ -1,10 +1,11 @@
 import axios from 'axios'
-import { reactive } from 'vue'
-import { RequestStore, setupAxiosManagerDevtools } from './devtools'
+
+import { markRaw, reactive, toRefs } from 'vue'
+import { setupAxiosManagerDevtools } from './devtools'
 import { checkDomain, createInternalEndpointName, inProduction } from './utils'
 
-import type { Plugin } from 'vue'
-import type { EndpointOptions, InternalEnpointOptions, PluginOptions } from './types'
+import type { App, Plugin } from 'vue'
+import type { _DevtoolsTimelineObject, _VueAxiosManager, EndpointOptions, InternalEndpointOptionKeys, InternalEnpointOptions, PluginOptions, RequestsContainer } from './types'
 
 /**
  * Manager that centralizes the different options
@@ -21,7 +22,7 @@ export class VueAxiosManager implements _VueAxiosManager {
 
   constructor() {
     this.pluginOptions = undefined
-    this.endpoints = undefined
+    this.endpoints = []
     this.provideAttr = {}
     this.container = {}
   }
@@ -156,7 +157,7 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
     }
   }
 
-  console.log('createAxiosInstance.baseDomain', baseDomain)
+  // console.log('createAxiosInstance.baseDomain', baseDomain)
 
   const axiosOptions = pluginOptions.axios || endpoint.axios || {}
   const instance = axios.create({
