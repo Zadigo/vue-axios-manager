@@ -68,7 +68,7 @@ The name of the endpoint which will be used to call the url in the compsable
 
 A domain used __only__ in developement mode
 
-> [NOTE]
+> [!NOTE]
 > The value should be domain ex. `example.com` without the protocole. Therefore `http://example.com` will raise an error
 > Paths are not accepted and will create url malformation
 
@@ -76,7 +76,7 @@ A domain used __only__ in developement mode
 
 This is the url that will be used exclusively in production
 
-> [NOTE]
+> [!NOTE]
 > `domain` accepts the protocole value
 
 `https`
@@ -149,7 +149,7 @@ const AsyncMyComponent = defineAsyncComponent({
 
 The method to use for the request
 
-> [NOTE]
+> [!NOTE]
 > The default method is "GET"
 
 `query`
@@ -183,7 +183,7 @@ This composable adds an extra layer of debouncing the request to a latter stage
 
 You can delay the call of the request with the `debounce` attribute of the composable.
 
-> [NOTE]
+> [!NOTE]
 > The debouncing is applied even if you call the request manually
 
 ## Contributing 🙏
