@@ -30,9 +30,5 @@ export default defineConfig({
         replacement: path.resolve(__dirname, 'src')
       }
     ]
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom'
   }
 })
