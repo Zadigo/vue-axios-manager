@@ -275,7 +275,7 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
  * @param path The path to log the client in
  * @param params The parameters for the request
  */
-export async function useAxiosLogin<T>(credentials: Credentials, clientName: string, path: string, params: LoginComposableOptions<T>): Promise<Ref<T | unknown>> {
+export async function useAxiosLogin<T>(credentials: Credentials, clientName: string, path: string, params?: LoginComposableOptions<T>): Promise<Ref<T | unknown>> {
   const { execute, responseData } = useRequest<T>(clientName, path, { method: 'post', body: credentials, ...params })
   await execute()
   return responseData
