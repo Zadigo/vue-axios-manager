@@ -1,8 +1,16 @@
 {
   "name": "vue-axios-manager",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
+  "description": "Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity.",
+  "license": "MIT",
+  "readme": "README.md",
+  "keywords": ["Axios", "Vue 3", "API", "Fetch", "fetch", "http"],
+  "author": {
+    "name": "John Pendenque",
+    "email": "pendenquejohn@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",

@@ -7,7 +7,7 @@
 
 __Vue Axios Manager__ is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity.
 
-## Why use Vue Axos Manager ❓
+## Why use Vue Axios Manager ❓
 
 In larger Vue applications, it's common to have multiple API endpoints 
 scattered throughout the codebase. Vue Axios Manager consolidates all your endpoints into a single, 
@@ -22,6 +22,12 @@ centralized configuration and provides simple composables to invoke them consist
 ## 👉🏽 [Demo with Vue 3 on StackBlitz](https://stackblitz.com/github/piniajs/example-vue-3-vite)
 
 ## Installation 🏠
+
+```typescript
+npm i @vue-axios-manager
+```
+
+Or,
 
 ```typescript
 pnpm i @vue-axios-manager
