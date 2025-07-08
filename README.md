@@ -5,27 +5,29 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-Vue Axios Manager is a simple plugin that allows you to create and mange multiple endpoints with Axios
-in any Vue application
+__Vue Axios Manager__ is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity.
 
-## Why use Vue Axos Manager
+## Why use Vue Axos Manager ❓
 
-Sometimes a Vue application can have multiple endpoints which often times can be
-dispersed within your application. Vue Axios Manager centralize all of them in one
-area and allows their invokation with simple composables.
+In larger Vue applications, it's common to have multiple API endpoints 
+scattered throughout the codebase. Vue Axios Manager consolidates all your endpoints into a single, 
+centralized configuration and provides simple composables to invoke them consistently.
 
 ## Features ✨
 
 - ⛰ Vue 3 ready
-- ✨ Centralize your API endpoints with [composables](#sending-requests) and built in [components](#sending-requests)
+- ✨ Centralizes all API endpoints via intuitive [composables](#composables)
+- 🔑 Built-in support for __automatic access and refresh token handling__
 
-## Installation
+## 👉🏽 [Demo with Vue 3 on StackBlitz](https://stackblitz.com/github/piniajs/example-vue-3-vite)
+
+## Installation 🏠
 
 ```typescript
 pnpm i @vue-axios-manager
 ```
 
-Then register the plugin in your in your Vue application:
+Then register the plugin in your Vue application:
 
 ```typescript
 import { createApiManager } from './plugins'
@@ -58,52 +60,69 @@ app.use(createVueAxiosManager({
 }))
 ```
 
-### Plugin options
+__Plugin options__
 
 `name`
 
-The name of the endpoint which will be used to call the url in the compsable
+Unique identifier for the endpoint, used in the composable call
 
 `dev`
 
-A domain used __only__ in developement mode
+Domain used __exclusively__ in development mode
 
 > [!NOTE]
-> The value should be domain ex. `example.com` without the protocole. Therefore `http://example.com` will raise an error
-> Paths are not accepted and will create url malformation
+> ⚠️ Must be a domain only (e.g., `example.com`). Do __not__ include protocol (`http://`) or paths
 
 `domain`
 
-This is the url that will be used exclusively in production
+Domain used in production mode
 
 > [!NOTE]
-> `domain` accepts the protocole value
+> ✅ Must include protocol (e.g., `https://api.example.com`).
 
 `https`
 
-Whether to use the development domain with `https`
+Boolean indicating whether to use HTTPS in development
 
 `accessEndpoint`
 
-If specified, this is the endpoint used to request an access token from your api endpoint
+API route used to request an access token
 
 `refreshEnpoint`
 
-If specified, this is the endpoint used to request an access token from your api endpoint
+API route used to refresh an access token
 
 `label`
 
-Label for the endpoint in the devtools manager
+Additional configuration options for the Axios instance
 
 `axios`
 
-Extra options to pass to the axios instance
+Additional configuration options for the Axios instance
+
+`accessKey`
+
+The name of the cookie key from which the access token will be read and used to authenticate requests
+
+`refreshKey`
+
+The name of the cookie key that stores the refresh token, used when refreshing the access token
+
+`bearer`
+
+The authorization scheme to use in the `Authorization` header (e.g., `"Bearer"`, `"Token"`, etc.). This value will prefix the access token like so:
+`Authorization: <bearer> <access-token>`
+
+### Access Token and Refresh Token Management 🔑
+
+> [!NOTE]
+> ✅ When a `401 Unauthorized` error occurs and both `accessEndpoint` and `refreshEndpoint` are defined, Vue Axios Manager automatically handles token refreshing and retries the original request
 
 ## Composables 🚀
 
 ### useRequest
 
-The simple way to send a request is to call the endpoint name followed by its path:
+A simple way to send requests using the configured endpoint and route:
 
 ```html
 <script setup lang="ts">
@@ -115,7 +134,8 @@ async function testExecuteInFunction() {
 </script>
 ```
 
-It can also be called directly in the setup script in a component:
+It can also be used inside the `setup` function and triggered on mount:
+
 ```html
 <script setup lang="ts">
 const { execute, responseData } = useRequest('myendpoint', '/v1/test')
@@ -126,7 +146,7 @@ onMounted(async() => {
 </script>
 ```
 
-And then called in the parent page with `Suspense`:
+To use it asynchronously with `<Suspense>`:
 
 ```html
 <Suspense>
@@ -143,48 +163,45 @@ const AsyncMyComponent = defineAsyncComponent({
 </scrip>
 ```
 
-#### Composable options
+__composable options__
 
 `method`
 
-The method to use for the request
-
-> [!NOTE]
-> The default method is "GET"
+HTTP method to use (default: `"GET"`)
 
 `query`
 
-Send url query with with url of the request
+Optional query parameters appended to the request URL
 
 `body`
 
-Send data with the body of the post request
+Data payload for `POST`, `PUT`, or `PATCH` requests.
 
 `baseUrl`
 
-Overrides the initial domain written on the endpoint all together
+Override the configured domain entirely
 
 > [!NOTE]
-> Both the `domain` and the `path` registered on the composable are ignored when this option is specified
+> ⚠️ When specified, both the `domain` and `endpoint` path are ignored
 
 `beforeStart`
 
-Callback function called before the request is executed
+Callback executed just before the request is made
 
 `watch`
 
-You execute the function based the change of the value of a parameter with `watch`
+Automatically trigger requests based on reactive value changes
 
 ### useAsynRequest
 
-This composable adds an extra layer of debouncing the request to a latter stage
+Adds a debounce layer to defer the request execution
 
 `debounce`
 
-You can delay the call of the request with the `debounce` attribute of the composable.
+Delays the execution of the request, even when triggered manually
 
 > [!NOTE]
-> The debouncing is applied even if you call the request manually
+> ⚠️ The debouncing is applied even if you call the request manually
 
 ## Contributing 🙏
 
@@ -215,3 +232,5 @@ You can delay the call of the request with the `debounce` attribute of the compo
   npm run release
   ```
 </details>
+
+## Thanks 🌸
