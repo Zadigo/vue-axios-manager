@@ -1,12 +1,12 @@
 import { useDebounceFn, watchDebounced } from '@vueuse/core'
 import { useCookies } from '@vueuse/integrations/useCookies.mjs'
 import axios, { AxiosError } from 'axios'
-import { computed, getCurrentInstance, inject, ref } from 'vue'
+import { computed, getCurrentInstance, ref } from 'vue'
 import { vueAxiosManager } from './base'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, RequestStoreClass } from './types'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -67,7 +67,7 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
             const { get, set } = useCookies([accessTokenKey, refreshTokenKey])
             const refresh = get<string | undefined>(refreshTokenKey)
 
-            console.log('responseErrorInterceptor: Refresh', refresh)
+            // console.log('responseErrorInterceptor: Refresh', refresh)
 
             const refreshClient = axios.create({ baseURL: domain })
             const refreshTokenEndpoint = endpoint?.refreshEnpoint || '/auth/v1/token/refresh/'
@@ -97,6 +97,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   const isAppContext = computed(() => app !== null)
 
   const endpoint = vueAxiosManager.provideAttr[name]
+  // console.log('vueAxiosManager', vueAxiosManager.provideAttr[name]?.internalName)
 
   if (typeof endpoint === 'undefined') {
     throw new Error(`Endpoint with with name ${name} does not exist`)
@@ -104,7 +105,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   let client = endpoint.instance
 
-  console.log('vueAxiosManager', vueAxiosManager)
+  // console.log('vueAxiosManager', vueAxiosManager)
 
   // baseUrl allows the user to override
   // the initial client entirely for this
@@ -124,16 +125,13 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
     throw new Error(e)
   }
 
-  let store: RequestStoreClass | undefined
-
   if (isAppContext.value) {
     // If we are in the context of a component
     // try to get the store with inject for
     // internal debug tracking
-    store = inject<RequestStoreClass>('requestStore')
   }
 
-  console.log('useRequest: RequestStore', store)
+  // console.log('useRequest: RequestStore', store)
 
   const responseData = ref<T>()
   const status = ref<RequestStatus>('idle')
@@ -167,23 +165,25 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
         params.completed(response)
       }
 
-        try {
+      try {
         vueAxiosManager._registerRequest(endpoint, {
-            name,
-            method,
-            statusText: response.statusText,
-            data: response.data || {},
-            headers: JSON.stringify(response.headers),
+          name,
+          method,
+          statusText: response.statusText,
+          data: response.data || {},
+          headers: JSON.stringify(response.headers),
           path: response.config?.url
-          })
-        } catch (e) {
-          console.error(e)
-        }
+        })
+      } catch (e) {
+        console.error(e)
       }
 
-      console.log('useRequest: status', status.value)
-      console.log('useRequest: responseData.value', responseData.value)
-      console.log('useRequest: response.data', response.data)
+      // console.log('execute.response', response)
+      // console.log('execute.store', store)
+
+      // console.log('useRequest: status', status.value)
+      // console.log('useRequest: responseData.value', responseData.value)
+      // console.log('useRequest: response.data', response.data)
 
       responseData.value = response.data
     } catch (e) {
@@ -196,13 +196,13 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   // TODO: Infer type
   if (params?.watch) {
-    console.log('useRequest: Watch', params.watch)
+    // console.log('useRequest: Watch', params.watch)
     watchDebounced(params.watch, async () => {
       await execute()
     }, {
       debounce: 300,
       onTrigger() {
-        console.log('useRequest: Watch', 'Executed')
+        // console.log('useRequest: Watch', 'Executed')
       }
     })
   }
