@@ -179,21 +179,6 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
 export function createVueAxiosManager(options: PluginOptions): Plugin {
   return {
     install(app) {
-//       const internalEndpointOptions = options.endpoints.map((endpointOptions) => {
-//           const result = createAxiosInstance(options, endpointOptions)
-//           app.config.globalProperties[result.internalName] = result.instance
-//           return result
-//       })
-
-//       const provideAttr: Record<string, InternalEnpointOptions> = {}
-//       internalEndpointOptions.forEach((endpoint) => {
-//           provideAttr[endpoint.name] = endpoint
-//       })
-
-//       vueAxiosManager.provideAttr = provideAttr
-//       vueAxiosManager.pluginOptions = options
-//       vueAxiosManager.endpoints = internalEndpointOptions
-
       vueAxiosManager.initialize(app, options)
 
       app.mixin({
