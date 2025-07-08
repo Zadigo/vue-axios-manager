@@ -3,7 +3,7 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
-  "description": "Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity.",
+  "description": "Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity",
   "license": "MIT",
   "readme": "README.md",
   "keywords": ["Axios", "Vue 3", "API", "Fetch", "fetch", "http"],
@@ -11,9 +11,27 @@
     "name": "John Pendenque",
     "email": "pendenquejohn@gmail.com"
   },
+  "main": "./dist/vue-axios-manager.umd.cjs",
+  "module": "./dist/vue-axios-manager.es.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "peerDependencies": {
+    "@vueuse/core": "^13.5.0",
+    "@vueuse/integrations": "^13.5.0",
+    "axios": "^1.10.0",
+    "universal-cookie": "^8.0.1",
+    "typescript": "^5.8.3",
+    "vue": "^3.5.17"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/vue-axios-manager.es.js",
+      "require": "./dist/vue-axios-manager.umd.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vite build && vue-tsc -b --declaration --emitDeclarationOnly --outDir dist",
     "test": "vitest run",
     "test:co": "vitest run --coverage",
     "watch": "vitest watch --coverage",

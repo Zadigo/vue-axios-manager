@@ -10,6 +10,16 @@ export default defineConfig({
     vue(),
     eslint()
   ],
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, 'src/plugins/index.ts'),
+      name: 'Vue Axios Manager',
+      fileName: format => `vue-axios-manager-${format}.js`,
+      rollupOptions: {
+        external: ['vue'],
+      }
+    }
+  },
   resolve: {
     alias: [
       {
