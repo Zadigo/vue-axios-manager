@@ -167,10 +167,6 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
         params.completed(response)
       }
 
-      console.log('execute.response', response)
-      console.log('execute.store', store)
-
-      if (store) {
         try {
         vueAxiosManager._registerRequest(endpoint, {
             name,
