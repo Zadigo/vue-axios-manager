@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Vue Axios Manager Documentation
+    url: https://github.com/Zadigo/vue-axios-manager#readme
+    about: Check the documentation for usage of Vue Axios Manager
