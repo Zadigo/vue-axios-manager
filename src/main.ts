@@ -1,6 +1,6 @@
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { createApiManager } from './plugins'
+import { createVueAxiosManager } from './plugins'
 
 import App from './App.vue'
 
@@ -12,7 +12,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 
-app.use(createApiManager({
+app.use(createVueAxiosManager({
   endpoints: [
     {
       name: 'quart',
