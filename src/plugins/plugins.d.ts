@@ -1,4 +1,12 @@
+import { vueAxiosManager } from './base'
+
 import type { InternalEnpointOptions } from './types'
+
+declare global {
+  interface Window {
+    VueAxiosManager?: typeof vueAxiosManager
+  }
+}
 
 declare module 'vue' {
   interface GlobalComponents { }

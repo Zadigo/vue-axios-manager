@@ -3,8 +3,17 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
-    "incremental": true
+    "incremental": true,
+    "types": [
+      "node",
+      "vite/client"
+    ]
   },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue"
+  ],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

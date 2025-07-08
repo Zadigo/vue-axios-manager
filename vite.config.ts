@@ -14,9 +14,12 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/plugins/index.ts'),
       name: 'Vue Axios Manager',
-      fileName: format => `vue-axios-manager-${format}.js`,
-      rollupOptions: {
-        external: ['vue']
+      fileName: format => `vue-axios-manager-${format}.js`
+    },
+    rollupOptions: {
+      external: ['vue'],
+      output: {
+        globals: { vue: 'Vue' }
       }
     }
   },
