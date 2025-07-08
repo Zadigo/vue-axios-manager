@@ -99,10 +99,8 @@ export function createApiManager(options: PluginOptions): Plugin {
       })
 
       if (!inProduction()) {
-        const store = new RequestStore(app, options, internalEndpointOptions)
-
-        app.provide('requestStore', store)
-        setupAxiosManagerDevtools(app, store)
+        window.VueAxiosManager = vueAxiosManager
+        setupAxiosManagerDevtools(app)
       }
     }
   }
