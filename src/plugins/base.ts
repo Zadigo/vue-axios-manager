@@ -140,13 +140,12 @@ export const vueAxiosManager = new VueAxiosManager()
  * @internal
  */
 export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: EndpointOptions): InternalEnpointOptions {
-  // const loc = endpoint.https ? 'https': 'http'
-  const loc = endpoint.https ? 'https' : 'http'
+  const protocole = endpoint.https ? 'https' : 'http'
   const devDomain = endpoint.dev || `127.0.0.1:${endpoint.port || 8000}`
 
   checkDomain(devDomain, endpoint)
 
-  let baseDomain: string = `${loc}://${devDomain}`
+  let baseDomain: string = `${protocole}://${devDomain}`
 
   if (inProduction()) {
     if (!endpoint.domain) {
