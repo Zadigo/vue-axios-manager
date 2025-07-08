@@ -98,7 +98,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   const endpoint = vueAxiosManager.provideAttr[name]
 
-  if (!endpoint) {
+  if (typeof endpoint === 'undefined') {
     throw new Error(`Endpoint with with name ${name} does not exist`)
   }
 
