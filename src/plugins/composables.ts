@@ -172,7 +172,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
       if (store) {
         try {
-          store.registerRequest({
+        vueAxiosManager._registerRequest(endpoint, {
             name,
             method,
             statusText: response.statusText,
