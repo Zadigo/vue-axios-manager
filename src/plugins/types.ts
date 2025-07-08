@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import type { Ref, App, Reactive, ToRefs } from 'vue'
 import type { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -254,8 +254,14 @@ export interface RefreshApiResponse {
 /**
  * @internal
  */
-export interface VueAxiosManager {
+export interface _VueAxiosManager {
   pluginOptions: PluginOptions | undefined
-  endpoints: InternalEnpointOptions[] | undefined
-  provider: Record<string, InternalEnpointOptions>
+  endpoints: InternalEnpointOptions[]
+  provideAttr: Record<string, InternalEnpointOptions>
+  container: Record<string, RequestsContainer[]>
+  initialize: (app: App, pluginOptions: PluginOptions) => void
+  _getRequests: (name: string) => ToRefs<Reactive<RequestsContainer[]>>
+  _getLast: (name: string) => Ref<RequestsContainer>
+  _registerRequest: (endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string) => void
+  _getEndpointValues: (name: string) => _DevtoolsTimelineObject[] | undefined
 }
