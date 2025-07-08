@@ -1,64 +1,66 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <div class="alert alert-warning">
-            {{ watchedResponse }}
-          </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5 offset-md-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="alert alert-warning">
+              {{ watchedResponse }}
+            </div>
 
-          <div class="alert alert-success">
-            Pinia store: {{ comments }}
-          </div>
+            <div class="alert alert-success">
+              Pinia store: {{ comments }}
+            </div>
 
-          <div class="alert alert-warning">
-            {{ normalUsageData }}
+            <div class="alert alert-warning">
+              {{ normalUsageData }}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="card shadow-sm my-2">
-        <div class="card-body">
-          <button class="btn btn-danger btn-rounded btn-block shadow-none" @click="testInFunction">
-            Test composable in function
-          </button>
+        <div class="card shadow-sm my-2">
+          <div class="card-body">
+            <button class="btn btn-danger btn-rounded btn-block shadow-none" @click="testInFunction">
+              Test composable in function
+            </button>
 
-          <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="testExecuteInFunction">
-            Test execute in function
-          </button>
+            <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="testExecuteInFunction">
+              Test execute in function
+            </button>
 
-          <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="() => count += 1">
-            Test with watch
-          </button>
+            <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="() => count += 1">
+              Test with watch
+            </button>
 
-          <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="requestProtected">
-            Test protected
-          </button>
+            <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="requestProtected">
+              Test protected
+            </button>
 
-          <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="store.handleComments">
-            Test from Pinia
-          </button>
+            <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="store.handleComments">
+              Test from Pinia
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="card-body">
-          <h1>Suspense</h1>
-          <Suspense>
-            <AsyncWithSuspense class="my-3" />
+        <div class="card">
+          <div class="card-body">
+            <h1>Suspense</h1>
+            <Suspense>
+              <AsyncWithSuspense class="my-3" />
 
-            <template #fallback>
-              Loading...
-            </template>
-          </Suspense>
+              <template #fallback>
+                Loading...
+              </template>
+            </Suspense>
 
-          <Suspense>
-            <AsyncImmediateSuspense />
+            <Suspense>
+              <AsyncImmediateSuspense />
 
-            <template #fallback>
-              Loading...
-            </template>
-          </Suspense>
+              <template #fallback>
+                Loading...
+              </template>
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>
