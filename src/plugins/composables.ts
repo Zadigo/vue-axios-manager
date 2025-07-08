@@ -174,7 +174,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
             statusText: response.statusText,
             data: response.data || {},
             headers: JSON.stringify(response.headers),
-            path: response.config.url
+          path: response.config?.url
           })
         } catch (e) {
           console.error(e)
