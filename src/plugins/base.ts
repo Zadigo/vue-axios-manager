@@ -198,7 +198,7 @@ export function createVueAxiosManager(options: PluginOptions): Plugin {
 
       app.mixin({
         provide: {
-          $axiosEndpoints: reactive(provideAttr)
+          $axiosManager: markRaw(vueAxiosManager)
         }
       })
 
