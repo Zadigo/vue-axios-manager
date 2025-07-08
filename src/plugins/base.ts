@@ -11,15 +11,118 @@ import type { EndpointOptions, InternalEnpointOptions, PluginOptions } from './t
  * of the application for different functions
  * @internal
  */
-class VueAxiosManager implements VueAxiosManager {
+export class VueAxiosManager implements _VueAxiosManager {
   public pluginOptions: PluginOptions | undefined
-  public endpoints: InternalEnpointOptions[] | undefined
-  public provideAttr: Record<string, InternalEnpointOptions | undefined>
+  public endpoints: InternalEnpointOptions[]
+  public provideAttr: Record<string, InternalEnpointOptions>
+
+  public api: unknown
+  public container: Record<string, RequestsContainer[]>
 
   constructor() {
     this.pluginOptions = undefined
     this.endpoints = undefined
     this.provideAttr = {}
+    this.container = {}
+  }
+
+  /**
+   * Initialize the manager
+   * @param app The vue application
+   * @param pluginOptions The optioons for the plugin
+   */
+  public initialize(app: App, pluginOptions: PluginOptions) {
+    this.pluginOptions = pluginOptions
+
+    this.endpoints = pluginOptions.endpoints.map((endpointOptions) => {
+      const result = createAxiosInstance(pluginOptions, endpointOptions)
+      app.config.globalProperties[result.internalName] = result.instance
+      return result
+    })
+
+    this.endpoints.forEach((endpoint) => {
+      this.provideAttr[endpoint.name] = endpoint
+      this.container[endpoint.name] = []
+    })
+  }
+
+  /**
+   * Return the requests for a given endpoint
+   * @param name The name of the endpoint
+   */
+  public _getRequests(name: string) {
+    return toRefs(reactive(this.container[name]))
+  }
+
+  /**
+   * The last request of the given array
+   * @param name Return the last request sent by a given enpoint
+   */
+  public _getLast(name: string) {
+    const requests = this._getRequests(name)
+    // @ts-expect-error length is Ref.length
+    return requests[requests.length - 1]
+  }
+
+  /**
+   * Register a new request
+   * @param options The options for the request
+   */
+  public _registerRequest(endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string) {
+    if (!endpoint) {
+      return
+    }
+
+    if (!inProduction()) {
+      if (this.api) {
+        // @ts-expect-error no export
+        this.api.addTimelineEvent({
+          layerId: timelineLayerId || 'axios-manager',
+          event: {
+            // @ts-expect-error no export
+            time: this.api.now(),
+            data: params
+          }
+        })
+      }
+
+      try {
+        // console.log('VueAxiosManager.container', this.container)
+        this.container[endpoint.name].push(params)
+      } catch (e: unknown) {
+        // @ts-expect-error Unknown error
+        throw new Error(e)
+      }
+    }
+  }
+
+  /**
+   * @param name The name of the endpoint to get
+   */
+  public _getEndpointValues(name: string): _DevtoolsTimelineObject[] | undefined {
+    const option = this.endpoints.find(item => item.name === name)
+    const optionsForDevtool: _DevtoolsTimelineObject[] = []
+
+    // // console.log('RequestStore: : option', option)
+
+    if (option) {
+      const keys = Object.keys(option) as InternalEndpointOptionKeys[]
+
+      // console.log('option', option, keys)
+
+      keys.filter(key => key !== 'instance').forEach((key) => {
+        const value = option[key]
+
+        if (value) {
+          optionsForDevtool.push({
+            key: key,
+            value
+          })
+        }
+      })
+      // console.log('getEndpoint', optionsForDevtool)
+      return optionsForDevtool
+    }
   }
 }
 
@@ -74,23 +177,25 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
  *
  * @param options Options for the endpoints to create
  */
-export function createApiManager(options: PluginOptions): Plugin {
+export function createVueAxiosManager(options: PluginOptions): Plugin {
   return {
     install(app) {
-      const internalEndpointOptions = options.endpoints.map((endpointOptions) => {
-        const result = createAxiosInstance(options, endpointOptions)
-        app.config.globalProperties[result.internalName] = result.instance
-        return result
-      })
+//       const internalEndpointOptions = options.endpoints.map((endpointOptions) => {
+//           const result = createAxiosInstance(options, endpointOptions)
+//           app.config.globalProperties[result.internalName] = result.instance
+//           return result
+//       })
 
-      const provideAttr: Record<string, InternalEnpointOptions> = {}
-      internalEndpointOptions.forEach((endpoint) => {
-        provideAttr[endpoint.name] = endpoint
-      })
+//       const provideAttr: Record<string, InternalEnpointOptions> = {}
+//       internalEndpointOptions.forEach((endpoint) => {
+//           provideAttr[endpoint.name] = endpoint
+//       })
 
-      vueAxiosManager.provideAttr = provideAttr
-      vueAxiosManager.pluginOptions = options
-      vueAxiosManager.endpoints = internalEndpointOptions
+//       vueAxiosManager.provideAttr = provideAttr
+//       vueAxiosManager.pluginOptions = options
+//       vueAxiosManager.endpoints = internalEndpointOptions
+
+      vueAxiosManager.initialize(app, options)
 
       app.mixin({
         provide: {
