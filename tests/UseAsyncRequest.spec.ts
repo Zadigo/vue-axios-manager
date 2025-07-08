@@ -1,9 +1,21 @@
-import { describe, expect, it, vi, afterAll, beforeEach } from 'vitest'
-import { useAsyncRequest } from '../src/plugins'
+import { useDebounceFn } from '@vueuse/core'
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { InternalEnpointOptions, useAsyncRequest, vueAxiosManager } from '../src/plugins'
+import { mockInternalEndpoint, mockProvideAttr } from './__fixtures__'
 
 import axios from 'axios'
 
 const mockAxios = vi.mocked(axios)
+
+const fakeVueAxiosManager = {
+  endpoints: [mockInternalEndpoint] as InternalEnpointOptions[],
+  provideAttr: mockProvideAttr as Record<string, InternalEnpointOptions>,
+  _registerRequest: vi.fn()
+}
+
+vi.spyOn(vueAxiosManager, 'initialize').mockImplementation(() => {
+  Object.assign(vueAxiosManager, fakeVueAxiosManager)
+})
 
 describe('useAsyncRequest', () => {
   let mockAxiosInstance: any
@@ -28,16 +40,35 @@ describe('useAsyncRequest', () => {
     }
 
     // Mock axios.create to return our mock instance
+    // @ts-expect-error Is mock
     mockAxios.create.mockReturnValue(mockAxiosInstance)
+
+    const endpoints = [
+      {
+        name: 'testendpoint',
+        internalName: '$testendpointAxios',
+        endpointDomain: 'http://example.com',
+        instance: mockAxios
+      }
+    ]
+    vueAxiosManager.endpoints = endpoints
+
+    vueAxiosManager.provideAttr = {
+      testendpoint: endpoints[0]
+    }
+
+    vueAxiosManager.pluginOptions = {
+      endpoints: endpoints
+    }
   })
 
   afterAll(() => {
     vi.resetAllMocks()
   })
 
-  it.skip('should return expected properties', async () => {
-    const { useDebounceFn } = require('@vueuse/core')
+  it('should return expected properties', async () => {
     const mockDebouncedFn = vi.fn()
+    // @ts-expect-error Is mock
     useDebounceFn.mockReturnValue(mockDebouncedFn)
 
     const result = await useAsyncRequest('testendpoint', '/v1/endpoint', {
@@ -50,9 +81,9 @@ describe('useAsyncRequest', () => {
     expect(result.completed.value).toBeFalsy()
   })
 
-  it.skip('should execute immediately when immediate option is true', async () => {
-    const { useDebounceFn } = require('@vueuse/core')
+  it('should execute immediately when immediate option is true', async () => {
     const mockDebouncedFn = vi.fn()
+    // @ts-expect-error Is mock
     useDebounceFn.mockReturnValue(mockDebouncedFn)
 
     await useAsyncRequest('testendpoint', '/v1/endpoint', {
@@ -63,9 +94,7 @@ describe('useAsyncRequest', () => {
     expect(mockDebouncedFn).toHaveBeenCalled()
   })
 
-  it.skip('should use custom debounce value', async () => {
-    const { useDebounceFn } = require('@vueuse/core')
-
+  it('should use custom debounce value', async () => {
     await useAsyncRequest('testendpoint', '/v1/endpoint', {
       baseUrl: 'http://example.com',
       debounce: 500

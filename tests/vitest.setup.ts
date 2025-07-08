@@ -1,17 +1,12 @@
 import { vi } from 'vitest'
 
-import axios from 'axios'
-
 vi.mock('axios')
-const mockAxios = vi.mocked(axios)
 
-// Mock @vueuse/core
 vi.mock('@vueuse/core', () => ({
-  useDebounceFn: vi.fn((fn, delay) => fn),
+  useDebounceFn: vi.fn((fn, _delay) => fn),
   watchDebounced: vi.fn()
 }))
 
-// Mock @vueuse/integrations/useCookies
 vi.mock('@vueuse/integrations/useCookies.mjs', () => ({
   useCookies: vi.fn(() => ({
     get: vi.fn(),
@@ -19,13 +14,12 @@ vi.mock('@vueuse/integrations/useCookies.mjs', () => ({
   }))
 }))
 
-// Mock Vue's getCurrentInstance
 vi.mock('vue', async () => {
   const actual = await vi.importActual<typeof import('vue')>('vue')
 
   return {
     ...actual,
-    getCurrentInstance: vi.fn(() => undefined), // Default to null (no Vue context)
+    getCurrentInstance: vi.fn(() => undefined),
     inject: vi.fn(() => undefined)
   }
 })
