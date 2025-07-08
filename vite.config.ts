@@ -16,7 +16,7 @@ export default defineConfig({
       name: 'Vue Axios Manager',
       fileName: format => `vue-axios-manager-${format}.js`,
       rollupOptions: {
-        external: ['vue'],
+        external: ['vue']
       }
     }
   },

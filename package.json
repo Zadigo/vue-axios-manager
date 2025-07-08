@@ -31,7 +31,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc -b --declaration --emitDeclarationOnly --outDir dist",
+    "build": "vite build && vue-tsc -b --declaration --emitDeclarationOnly",
     "test": "vitest run",
     "test:co": "vitest run --coverage",
     "watch": "vitest watch --coverage",
