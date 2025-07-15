@@ -13,6 +13,7 @@ const app = createApp(App)
 app.use(createPinia())
 
 app.use(createVueAxiosManager({
+  disableAuth: false,
   endpoints: [
     {
       name: 'quart',
