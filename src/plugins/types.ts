@@ -17,6 +17,14 @@ interface SharedOptions {
    * @default "Token"
    */
   bearer?: string
+  /**
+   * Disables both access and refresh token verification and workflow. This option
+   * will override the `disableAccess` and `disableRefresh` options regardless of
+   * what they are set to `true` or `false`.
+   * @description This is useful for endpoints that do not require authentication
+   * @default false
+   */
+  disableAuth?: boolean
 }
 
 export interface EndpointOptions extends SharedOptions {
@@ -70,6 +78,16 @@ export interface EndpointOptions extends SharedOptions {
    * @default "refresh"
    */
   refreshKey?: string
+  /**
+   * Disables the access token verification
+   * @default false
+   */
+  disableAccess?: boolean
+  /**
+   * Disables the refresh token refresh workflow
+   * @default false
+   */
+  disableRefresh?: boolean
 }
 
 export interface PluginOptions extends SharedOptions {
@@ -262,6 +280,6 @@ export interface _VueAxiosManager {
   initialize: (app: App, pluginOptions: PluginOptions) => void
   _getRequests: (name: string) => ToRefs<Reactive<RequestsContainer[]>>
   _getLast: (name: string) => Ref<RequestsContainer>
-  _registerRequest: (endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string) => void
+  _registerRequest: (method: string, endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string, isError?: boolean) => void
   _getEndpointValues: (name: string) => _DevtoolsTimelineObject[] | undefined
 }

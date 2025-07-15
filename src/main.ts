@@ -23,6 +23,9 @@ app.use(createVueAxiosManager({
       accessEndpoint: '/v1/token',
       refreshEnpoint: '/v1/refresh-token',
       label: 'MyLabel',
+      bearer: 'Bearer',
+      disableAccess: false,
+      disableRefresh: true,
       axios: {
         withCredentials: true,
         timeout: 20000,

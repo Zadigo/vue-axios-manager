@@ -22,7 +22,7 @@ function requestInterceptor(options: PluginOptions | undefined, endpoint: Intern
     const bearer = endpoint?.bearer || options?.bearer || 'Token'
     const access = get(endpoint?.accessKey || 'access')
 
-    if (access) {
+    if (access && !endpoint.disableAccess) {
       request.headers.Authorization = `${bearer} ${access}`
     }
 
@@ -54,6 +54,11 @@ async function responseInterceptor(response: AxiosResponse) {
 function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpointOptions | null | undefined) {
   return async (error: unknown) => {
     if (error && error instanceof AxiosError) {
+      // console.log('responseErrorInterceptor: endpoint.disableAuth', endpoint.disableRefresh)
+      if (endpoint.disableRefresh) {
+        return Promise.reject(error)
+      }
+
       if (error.response) {
         const originalRequest = error.config as ExtendedInternalAxiosRequestConfig
 
