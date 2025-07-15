@@ -15,12 +15,12 @@ export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
  * tokens obtained for authenticating the user
  * @param request The request configuration
  */
-function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpointOptions | null | undefined) {
+function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpointOptions) {
   return (request: InternalAxiosRequestConfig) => {
     const { get } = useCookies()
 
-    const bearer = endpoint?.bearer || options?.bearer || 'Token'
-    const access = get(endpoint?.accessKey || 'access')
+    const bearer = endpoint.bearer || options?.bearer || 'Token'
+    const access = get(endpoint.accessKey || 'access')
 
     if (access && !endpoint.disableAccess) {
       request.headers.Authorization = `${bearer} ${access}`
@@ -51,7 +51,7 @@ async function responseInterceptor(response: AxiosResponse) {
  * access tokens created via authentication for users
  * @param domain The url domain for the request
  */
-function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpointOptions | null | undefined) {
+function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpointOptions) {
   return async (error: unknown) => {
     if (error && error instanceof AxiosError) {
       // console.log('responseErrorInterceptor: endpoint.disableAuth', endpoint.disableRefresh)
@@ -66,8 +66,8 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
           originalRequest._retry = true
 
           try {
-            const accessTokenKey = endpoint?.accessKey || 'access'
-            const refreshTokenKey = endpoint?.refreshKey || 'refresh'
+            const accessTokenKey = endpoint.accessKey || 'access'
+            const refreshTokenKey = endpoint.refreshKey || 'refresh'
 
             const { get, set } = useCookies([accessTokenKey, refreshTokenKey])
             const refresh = get<string | undefined>(refreshTokenKey)
@@ -75,7 +75,7 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
             // console.log('responseErrorInterceptor: Refresh', refresh)
 
             const refreshClient = axios.create({ baseURL: domain })
-            const refreshTokenEndpoint = endpoint?.refreshEnpoint || '/auth/v1/token/refresh/'
+            const refreshTokenEndpoint = endpoint.refreshEnpoint || '/auth/v1/token/refresh/'
             const response = await refreshClient.post<RefreshApiResponse>(refreshTokenEndpoint, { refresh })
 
             set(accessTokenKey, response.data.access, { secure: true, sameSite: 'strict' })
