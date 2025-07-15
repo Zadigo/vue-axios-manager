@@ -39,6 +39,14 @@
             <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="store.handleComments">
               Test from Pinia
             </button>
+
+            <button class="btn btn-warning btn-rounded btn-primary btn-block shadow-none" @click="testPostRequest">
+              Test Post
+            </button>
+
+            <button class="btn btn-danger btn-rounded btn-primary btn-block shadow-none" @click="testAuthenticted">
+              Test Authenticated View
+            </button>
           </div>
         </div>
 
@@ -107,6 +115,20 @@ const { responseData: watchedResponse } = useRequest('quart', '/v1/test', {
  * Expect a 401 error in order to test interceptors
  */
 const { execute: requestProtected } = useRequest('quart', '/v1/protected')
+
+/**
+ * POST request
+ */
+const { execute: testPostRequest } = useRequest('quart', '/v1/update', {
+  method: 'post'
+})
+
+/**
+ * Authenticated View
+ */
+const { execute: testAuthenticted } = useRequest('quart', '/v1/authenticated', {
+  method: 'post'
+})
 
 const store = useComments()
 const { comments } = storeToRefs(store)
