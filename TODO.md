@@ -2,4 +2,5 @@
 
 ### useAyncRequest
 
-- [] Add option to disable access token and refresh token auto management
+- [ ] Add option to disable access token, refresh token or both token auto management (`disableAccess`, `disableRefresh`)
+- [ ] Add option to disable authentication all together (`disableAuth`)
