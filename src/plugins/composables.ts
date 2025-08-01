@@ -172,10 +172,10 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
       }
 
       try {
-        vueAxiosManager._registerRequest(endpoint, {
+        vueAxiosManager._registerRequest(method, endpoint, {
           name,
           method,
-          statusText: response.statusText,
+          statusText: 'OK',
           data: response.data || {},
           headers: JSON.stringify(response.headers),
           path: response.config?.url
@@ -184,7 +184,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
         console.error(e)
       }
 
-      // console.log('execute.response', response)
+      console.log('execute.response', response)
       // console.log('execute.store', store)
 
       // console.log('useRequest: status', status.value)
@@ -193,9 +193,23 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
       responseData.value = response.data
     } catch (e) {
+      status.value = 'error'
+
       if (e && e instanceof AxiosError) {
         console.log('useRequest: Bubbled up error', e)
-        status.value = 'error'
+
+        // try {
+        //   vueAxiosManager._registerRequest(e.config?.method, endpoint, {
+        //     name,
+        //     method: e.config?.method,
+        //     statusText: e.response?.statusText,
+        //     data: e.response?.data || {},
+        //     headers: JSON.stringify(e.response?.headers),
+        //     path: e.response?.config?.url
+        //   }, null, true)
+        // } catch (e) {
+        //   console.log(e)
+        // }
       }
     }
   }

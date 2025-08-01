@@ -2,7 +2,6 @@
   "compilerOptions": {
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
     "incremental": true,
     "types": [
       "node",
@@ -13,6 +12,9 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.vue"
+  ],
+  "exclude": [
+    "src/main.ts"
   ],
   "references": [
     { "path": "./tsconfig.app.json" },

@@ -69,7 +69,7 @@ export class VueAxiosManager implements _VueAxiosManager {
    * Register a new request
    * @param options The options for the request
    */
-  public _registerRequest(endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string) {
+  public _registerRequest(method: string, endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string, isError: boolean = false) {
     if (!endpoint) {
       return
     }
@@ -82,6 +82,10 @@ export class VueAxiosManager implements _VueAxiosManager {
           event: {
             // @ts-expect-error no export
             time: this.api.now(),
+            title: method,
+            subtitle: 'Axios Request',
+            logType: isError ? 'error' : 'default',
+            groupId: method,
             data: params
           }
         })
