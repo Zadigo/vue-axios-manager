@@ -13,6 +13,8 @@ In larger Vue applications, it's common to have multiple API endpoints
 scattered throughout the codebase. Vue Axios Manager consolidates all your endpoints into a single, 
 centralized configuration and provides simple composables to invoke them consistently.
 
+- [✨ &nbsp;Release Notes](/CHANGELOG.md)
+
 ## Features ✨
 
 - ⛰ Vue 3 ready
