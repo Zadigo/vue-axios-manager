@@ -1,6 +1,6 @@
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { createVueAxiosManager } from './plugins'
+import { createVueAxiosManager } from './lib/base'
 
 import App from './App.vue'
 
