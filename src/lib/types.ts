@@ -181,6 +181,9 @@ export interface AsyncComposableOptions<T> extends ComposableOptions<T> {
 
 export type LoginComposableOptions<T> = Omit<ComposableOptions<T>, 'method' | 'body'>
 
+/**
+ * @todo rename to "HttpMethods"
+ */
 export type Methods = 'get' | 'post' | 'delete' | 'put' | 'patch'
 
 export interface Credentials extends Record<string, string | undefined> {

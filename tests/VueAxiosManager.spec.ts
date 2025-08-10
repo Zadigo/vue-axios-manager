@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { isRef } from 'vue'
-import { _VueAxiosManager, VueAxiosManager } from '../src/plugins'
+import { _VueAxiosManager, VueAxiosManager } from '../src'
 import { fakePluginOptions, mockEndpoint, mockRequest } from './__fixtures__'
 
 describe('Vue Axios Manager', () => {
@@ -23,7 +23,7 @@ describe('Vue Axios Manager', () => {
   it('should be able to register request', () => {
     // @ts-expect-error Vue App
     instance.initialize(fakeApp, fakePluginOptions)
-    instance._registerRequest(mockEndpoint, mockRequest)
+    instance._registerRequest('GET', mockEndpoint, mockRequest)
 
     expect(instance.container['testendpoint'].length).toBe(1)
 

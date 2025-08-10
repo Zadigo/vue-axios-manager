@@ -1,8 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createAxiosInstance, PluginOptions } from '../src/plugins'
-import { createInternalEndpointName, inProduction } from '../src/plugins/utils'
+import { createAxiosInstance, createInternalEndpointName, inProduction, PluginOptions } from '../src'
 
-import axios from 'axios'
 // import {  } from 'node:inspector'
 
 describe('utility functions', () => {

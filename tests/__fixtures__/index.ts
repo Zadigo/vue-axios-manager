@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import type { EndpointOptions, PluginOptions, RequestsContainer, InternalEnpointOptions } from '../../src/plugins'
+import type { EndpointOptions, InternalEnpointOptions, PluginOptions, RequestsContainer } from '../../src'
 
 import axios from 'axios'
 

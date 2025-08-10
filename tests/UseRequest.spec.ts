@@ -1,9 +1,9 @@
-import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ref } from 'vue'
-import { InternalEnpointOptions, useRequest, vueAxiosManager } from '../src/plugins'
-import { mockInternalEndpoint, mockProvideAttr } from './__fixtures__'
 import { watchDebounced } from '@vueuse/core'
 import { useCookies } from '@vueuse/integrations/useCookies.mjs'
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
+import { InternalEnpointOptions, useRequest, vueAxiosManager } from '../src'
+import { mockInternalEndpoint, mockProvideAttr } from './__fixtures__'
 
 import axios from 'axios'
 
