@@ -160,9 +160,9 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
       status.value = 'pending'
 
       if (method === 'get') {
-        response = await client.get(path, { params: params?.query })
+        response = await client.get<T>(path, { params: params?.query })
       } else {
-        response = await client[method](path, params?.body)
+        response = await client[method]<T>(path, params?.body)
       }
 
       status.value = 'success'
@@ -184,7 +184,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
         console.error(e)
       }
 
-      console.log('execute.response', response)
+      // console.log('execute.response', response)
       // console.log('execute.store', store)
 
       // console.log('useRequest: status', status.value)
