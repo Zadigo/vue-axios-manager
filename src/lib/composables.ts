@@ -255,11 +255,11 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
   // app in useRequest is "undefined" ->
   // 1. This might be due to the fact of using a composable within a composable ??
   // 2. This might be due to the useDebounceFn
-  const { execute, responseData, status } = useRequest(name, path, params)
-  const debouncedExecute = useDebounceFn(execute, params?.debounce || 0)
+  const { execute: syncExecute, responseData, status } = useRequest(name, path, params)
+  const execute = useDebounceFn(syncExecute, params?.debounce || 0)
 
   if (params?.immediate) {
-    await debouncedExecute()
+    await execute()
   }
 
   const completed = computed(() => status.value === 'success')
@@ -268,7 +268,7 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
     /**
      * Wrapped execute function that can be debounced
      */
-    debouncedExecute,
+    execute,
     /**
      * Data received from the request
      */

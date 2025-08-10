@@ -75,7 +75,7 @@ describe('useAsyncRequest', () => {
       baseUrl: 'http://example.com'
     })
 
-    expect(result.debouncedExecute).toBe(mockDebouncedFn)
+    expect(result.execute).toBe(mockDebouncedFn)
     expect(result.status.value).toBe('idle')
     expect(result.responseData.value).toBeUndefined()
     expect(result.completed.value).toBeFalsy()
@@ -114,20 +114,20 @@ describe('useAsyncRequest', () => {
 
     mockAxiosInstance.get.mockResolvedValue(mockResponse)
 
-    const { debouncedExecute, completed } = await useAsyncRequest('testendpoint', '/v1/endpoint', {
+    const { execute, completed } = await useAsyncRequest('testendpoint', '/v1/endpoint', {
       baseUrl: 'http://example.com'
     })
 
     // Manually execute since we're not using immediate
-    await debouncedExecute()
+    await execute()
 
     expect(completed.value).toBeTruthy()
   })
 
   it('should return expected items', async () => {
-    const { debouncedExecute, completed, status, responseData } = await useAsyncRequest('testendpoint', '/v1/endpoint', { baseUrl: 'http://example' })
+    const { execute, completed, status, responseData } = await useAsyncRequest('testendpoint', '/v1/endpoint', { baseUrl: 'http://example' })
 
-    expect(debouncedExecute).toBeTypeOf('function')
+    expect(execute).toBeTypeOf('function')
     expect(status.value).toBeTypeOf('string')
     expect(status.value).to.equal('idle')
     expect(responseData.value).toBeUndefined()
