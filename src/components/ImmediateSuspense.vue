@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useAsyncRequest } from '../plugins'
+import { useAsyncRequest } from '../lib/composables'
 
 const { debouncedExecute, responseData } = await useAsyncRequest('quart', '/v1/test', {
   immediate: true

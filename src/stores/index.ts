@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useRequest } from '../plugins'
+import { useRequest } from '../lib/composables'
 
 export const useComments = defineStore('comments', () => {
   const comments = ref<{ status: boolean }>()
