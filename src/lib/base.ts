@@ -184,7 +184,7 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
     finalOptions.disableRefresh = false
   }
 
-  if (pluginOptions.disableAuth) {
+  if (endpoint.disableAuth) {
     finalOptions.disableAccess = true
     finalOptions.disableRefresh = true
   }
