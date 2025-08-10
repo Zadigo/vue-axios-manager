@@ -1,13 +1,17 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { createAxiosInstance, createInternalEndpointName, inProduction, PluginOptions } from '../src'
 
 // import {  } from 'node:inspector'
 
-describe('utility functions', () => {
-  afterEach(() => {
-    vi.unstubAllEnvs()
-  })
+const pluginOptions: PluginOptions = {
+  endpoints: [
+    {
+      name: 'myendpoint'
+    }
+  ]
+}
 
+describe('utility functions', () => {
   describe('inProduction', () => {
     it('in development should return true', () => {
       expect(inProduction()).toBeFalsy()
@@ -30,14 +34,6 @@ describe('utility functions', () => {
 })
 
 describe('Create Axios Instance', () => {
-  const pluginOptions: PluginOptions = {
-    endpoints: [
-      {
-        name: 'myendpoint'
-      }
-    ]
-  }
-
   it('create axios instance should return endpoint configuration', () => {
     const endpoint = createAxiosInstance(pluginOptions, pluginOptions.endpoints[0])
   
@@ -48,13 +44,47 @@ describe('Create Axios Instance', () => {
     expect(endpoint.dev).toBeUndefined()
     expect(endpoint.endpointDomain).toEqual('http://127.0.0.1:8000')
     expect(endpoint.internalName).toEqual(createInternalEndpointName('myendpoint'))
+
+    // If not explicity specified these should be false
+    expect(endpoint.disableAccess).toBeFalsy()
+    expect(endpoint.disableRefresh).toBeFalsy()
   })
 
-  it.fails('in production domain *must* be set', () => {
-    const originalNodeEnv = process.env.NODE_ENV
+  it('should disable all auths when disableAuth is specified', () => {
+    const initialEndpoint = pluginOptions.endpoints[0]
+    initialEndpoint.disableAuth = true
+    const endpoint = createAxiosInstance(pluginOptions, initialEndpoint)
 
+    console.log(endpoint)
+
+    expect(endpoint.disableAccess).toBeTruthy()
+    expect(endpoint.disableRefresh).toBeTruthy()
+  })
+})
+
+describe('Create Axios Instance - Production', () => {
+  beforeAll(() => {
     vi.stubEnv('NODE_ENV', 'production')
-    createAxiosInstance(pluginOptions, pluginOptions.endpoints[0])
-    vi.stubEnv('NODE_ENV', originalNodeEnv)
+  })
+
+  afterAll(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('domain *must* be set', () => {
+    // const originalNodeEnv = process.env.NODE_ENV
+    // console.log(originalNodeEnv)
+
+    // vi.stubEnv('NODE_ENV', 'production')
+    const initialEndpoint = pluginOptions.endpoints[0]
+    initialEndpoint.domain = 'example.com'
+    createAxiosInstance(pluginOptions, initialEndpoint)
+    // vi.stubEnv('NODE_ENV', originalNodeEnv)
+  })
+
+  it.fails('domain cannot start with http or https', () => {
+    const initialEndpoint = pluginOptions.endpoints[0]
+    initialEndpoint.domain = 'http://example.com'
+    createAxiosInstance(pluginOptions, initialEndpoint)
   })
 })

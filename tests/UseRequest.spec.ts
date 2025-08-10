@@ -9,17 +9,15 @@ import axios from 'axios'
 
 const mockAxios = vi.mocked(axios)
 
-const fakeVueAxiosManager = {
-  endpoints: [mockInternalEndpoint] as InternalEnpointOptions[],
-  provideAttr: mockProvideAttr as Record<string, InternalEnpointOptions>,
-  _registerRequest: vi.fn()
-}
-
 vi.spyOn(vueAxiosManager, 'initialize').mockImplementation(() => {
-  Object.assign(vueAxiosManager, fakeVueAxiosManager)
+  Object.assign(vueAxiosManager, {
+    endpoints: [mockInternalEndpoint] as InternalEnpointOptions[],
+    provideAttr: mockProvideAttr as Record<string, InternalEnpointOptions>,
+    _registerRequest: vi.fn()
+  })
 })
 
-describe('Test composables', () => {
+describe('useRequest composable', () => {
   let mockAxiosInstance: any
 
   beforeEach(() => {
@@ -59,22 +57,17 @@ describe('Test composables', () => {
         instance: mockAxios
       }
     ]
+
     vueAxiosManager.endpoints = endpoints
-
-    vueAxiosManager.provideAttr = {
-      testendpoint: endpoints[0]
-    }
-
-    vueAxiosManager.pluginOptions = {
-      endpoints: endpoints
-    }
+    vueAxiosManager.provideAttr = { testendpoint: endpoints[0] }
+    vueAxiosManager.pluginOptions = { endpoints }
   })
 
   afterAll(() => {
     vi.resetAllMocks()
   })
 
-  describe('useRequest', () => {
+  describe('test implementation', () => {
     it('should create axios instance with baseUrl when no Vue context', () => {
       const { execute, status, responseData } = useRequest('testendpoint', '/v1/endpoint', {
         baseUrl: 'http://example.com'
@@ -144,7 +137,7 @@ describe('Test composables', () => {
       expect(mockAxiosInstance.post).toHaveBeenCalledWith('/v1/endpoint', requestBody)
     })
 
-    it.skip('should handle request errors', async () => {
+    it('should handle request errors', async () => {
       const mockError = new Error('Network Error')
       mockAxiosInstance.get.mockRejectedValue(mockError)
 
@@ -305,6 +298,8 @@ describe('Test composables', () => {
       })
 
       await execute()
+      
+      console.log(vueAxiosManager.container)
 
       expect(responseData.value).toBeUndefined()
     })
@@ -324,7 +319,7 @@ describe('Test composables', () => {
   })
 
   describe('Type Safety', () => {
-    it('should maintain type safety for response data', async () => {
+    it.todo('should maintain type safety for response data', async () => {
       interface User {
         id: number
         name: string

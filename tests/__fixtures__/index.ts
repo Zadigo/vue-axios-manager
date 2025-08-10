@@ -6,7 +6,8 @@ import axios from 'axios'
 const mockAxios = vi.mocked(axios)
 
 export const mockEndpoint: EndpointOptions = {
-  name: 'testendpoint'
+  name: 'testendpoint',
+  label: 'test'
 }
 
 export const mockInternalEndpoint: InternalEnpointOptions = {
