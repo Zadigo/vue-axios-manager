@@ -22,9 +22,9 @@ export default defineConfig({
       fileName: format => `vue-axios-manager-${format}.js`
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'axios'],
       output: {
-        globals: { vue: 'Vue' }
+        globals: { vue: 'Vue', axios: 'axios' }
       }
     }
   },
