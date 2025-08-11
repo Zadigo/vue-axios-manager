@@ -11,11 +11,11 @@
 import { onMounted } from 'vue'
 import { useAsyncRequest } from '../lib/composables'
 
-const { debouncedExecute, responseData } = await useAsyncRequest('quart', '/v1/test', {
+const { execute, responseData } = await useAsyncRequest('quart', '/v1/test', {
   immediate: true
 })
 
 onMounted(async () => {
-  await debouncedExecute()
+  await execute()
 })
 </script>

@@ -2,7 +2,7 @@ import { watchDebounced } from '@vueuse/core'
 import { useCookies } from '@vueuse/integrations/useCookies.mjs'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
-import { InternalEnpointOptions, useRequest, vueAxiosManager } from '../src'
+import { InternalEnpointOptions, useRequest, vueAxiosManager } from '../src/lib'
 import { mockInternalEndpoint, mockProvideAttr } from './__fixtures__'
 
 import axios from 'axios'

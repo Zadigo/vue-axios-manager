@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, afterAll, beforeEach } from 'vitest'
-import { useAxiosLogin, vueAxiosManager } from '../src'
+import { useAxiosLogin, vueAxiosManager } from '../src/lib'
 
 import axios from 'axios'
 

@@ -11,11 +11,11 @@
 import { onMounted } from 'vue'
 import { useAsyncRequest } from '../lib/composables'
 
-const { debouncedExecute, responseData } = await useAsyncRequest('comments', '/todos/1', {
+const { execute, responseData } = await useAsyncRequest('comments', '/todos/1', {
   debounce: 10000
 })
 
 onMounted(async () => {
-  await debouncedExecute()
+  await execute()
 })
 </script>

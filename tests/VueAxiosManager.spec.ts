@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { isRef } from 'vue'
-import { _VueAxiosManager, VueAxiosManager } from '../src'
+import { _VueAxiosManager, VueAxiosManager } from '../src/lib'
 import { fakePluginOptions, mockEndpoint, mockRequest } from './__fixtures__'
 
 describe('Vue Axios Manager', () => {
