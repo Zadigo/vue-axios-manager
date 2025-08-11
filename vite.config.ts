@@ -17,8 +17,8 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/plugins/index.ts'),
-      name: 'Vue Axios Manager',
+      entry: path.resolve(__dirname, 'src/lib/index.ts'),
+      name: 'VueAxiosManager',
       fileName: format => `vue-axios-manager-${format}.js`
     },
     rollupOptions: {
