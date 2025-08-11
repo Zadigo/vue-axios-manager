@@ -176,7 +176,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
           name,
           method,
           statusText: 'OK',
-          data: response.data || {},
+          data: (response.data ?? response.data) || {},
           headers: JSON.stringify(response.headers),
           path: response.config?.url
         })
