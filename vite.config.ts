@@ -11,20 +11,44 @@ export default defineConfig({
     vue(),
     dts({
       insertTypesEntry: true,
-      copyDtsFiles: false
+      copyDtsFiles: true,
+      include: ['src/lib/**/*'],
+      exclude: [
+        'src/lib/**/*.test.*',
+        'src/lib/**/*.spec.*',
+        'src/lib/**/*.stories.*',
+        '**/*.config.*',
+        '**/vite.config.*',
+        '**/eslint.config.*',
+        '**/vitest.config.*',
+        'node_modules/**',
+        'dist/**'
+      ],
+      outDir: 'dist',
+      entryRoot: 'src/lib/index.ts',
+      // rollupTypes: true
     }),
     eslint()
   ],
   build: {
+    sourcemap: true,
+    emptyOutDir: true,
     lib: {
       entry: path.resolve(__dirname, 'src/lib/index.ts'),
       name: 'VueAxiosManager',
-      fileName: format => `vue-axios-manager-${format}.js`
+      formats: ['es', 'umd'],
+      fileName: format => `vue-axios-manager.${format === 'es' ? 'es.js' : 'umd.cjs'}`
     },
     rollupOptions: {
-      external: ['vue', 'axios'],
+      external: ['vue', 'axios', '@vueuse/core', '@vueuse/integrations', 'universal-cookie'],
       output: {
-        globals: { vue: 'Vue', axios: 'axios' }
+        globals: {
+          'vue': 'Vue',
+          'axios': 'axios',
+          '@vueuse/core': 'VueUseCore',
+          '@vueuse/integrations': 'VueUseIntegrations',
+          'universal-cookie': 'UniversalCookie'
+        }
       }
     }
   },

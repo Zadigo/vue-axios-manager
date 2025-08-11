@@ -27,3 +27,6 @@ dist-ssr
 /.vscode
 /node_modules
 /coverage
+
+*.tsbuildinfo
+*.tgz
