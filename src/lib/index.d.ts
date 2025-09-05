@@ -10,7 +10,7 @@ declare global {
 
 declare module 'vue' {
   interface GlobalComponents { }
-  
+
   export interface ComponentCustomProperties {
     $axiosEndpoints: Record<string, InternalEnpointOptions>
   }
