@@ -30,6 +30,13 @@
     "LICENSE",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zadigo/vue-axios-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Zadigo/vue-axios-manager/issues"
+  },
   "peerDependencies": {
     "axios": "^1.10.0",
     "vue": "^3.5.17"
