@@ -46,11 +46,13 @@
   "scripts": {
     "dev": "vite playground",
     "build": "rollup -c",
-    "test": "vitest run",
-    "test:co": "vitest run --coverage",
-    "watch": "vitest watch --coverage",
-    "lint": "eslint ./src --ext .ts,.js",
-    "preview": "vite preview"
+    "test": "vitest run --coverage",
+    "test:watch": "vitest watch --coverage",
+    "preview": "vite preview",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@vueuse/core": "^13.9.0",
@@ -59,6 +61,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.4",
     "@stylistic/eslint-plugin": "^5.4.0",
     "@types/node": "^24.5.2",
     "@vitejs/plugin-vue": "^6.0.1",
@@ -74,6 +78,7 @@
     "js-dom": "^0.0.1",
     "mdb-ui-kit": "^9.2.0",
     "pinia": "^3.0.3",
+    "rollup": "^4.52.2",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.44.1",
     "vite": "^7.1.7",
