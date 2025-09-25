@@ -1,13 +1,44 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue + TS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vue3 Axios Manager playground</title>
+    <script type="module">
+      import { createApp } from 'vue'
+      import { createPinia } from 'pinia'
+      import { createVueAxiosManager } from '../src/lib'
+
+      import App from './App.vue'
+
+      import 'bootstrap/dist/css/bootstrap.min.css'
+      import 'mdb-ui-kit/css/mdb.min.css'
+
+      const app = createApp(App)
+      app.use(createPinia())
+      app.use(createVueAxiosManager({
+        endpoints: [
+          {
+            name: 'quart',
+            baseURL: 'https://jsonplaceholder.typicode.com',
+            defaultHeaders: {
+              'Content-Type': 'application/json',
+            }
+          },
+          {
+            name: 'comments',
+            baseURL: 'https://jsonplaceholder.typicode.com/comments',
+            defaultHeaders: {
+              'Content-Type': 'application/json',
+            }
+          }
+        ]
+      }))
+      app.mount('#app')
+    </script>
   </head>
+
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

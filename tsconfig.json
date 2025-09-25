@@ -4,9 +4,20 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "moduleResolution": "node",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ],
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "rollup/parseAst": [
+        "./node_modules/rollup/dist/parseAst"
       ]
     },
     "types": [
@@ -19,5 +30,5 @@
   ],
   "exclude": [
     "node_modules"
-  ],
+  ]
 }

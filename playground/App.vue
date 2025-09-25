@@ -82,11 +82,11 @@ import { useComments } from './stores'
 import { storeToRefs } from 'pinia'
 
 const AsyncWithSuspense = defineAsyncComponent({
-  loader: () => import('./components/WithSuspense.vue')
+  loader: () => import('@/components/WithSuspense.vue')
 })
 
 const AsyncImmediateSuspense = defineAsyncComponent({
-  loader: () => import('./components/ImmediateSuspense.vue')
+  loader: () => import('@/components/ImmediateSuspense.vue')
 })
 
 /**
