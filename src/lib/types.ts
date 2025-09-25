@@ -1,5 +1,5 @@
-import type { Ref, App, Reactive, ToRefs } from 'vue'
 import type { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
+import type { App, Reactive, Ref, ToRefs } from 'vue'
 
 export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean

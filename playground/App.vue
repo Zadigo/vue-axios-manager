@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from 'vue'
-import { useRequest } from './lib/composables'
+import { useRequest } from '../src/lib/composables'
 import { useComments } from './stores'
 import { storeToRefs } from 'pinia'
 

@@ -3,21 +3,21 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
     "types": [
       "node",
       "vite/client"
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue"
+    "src"
   ],
   "exclude": [
-    "src/main.ts"
+    "node_modules"
   ],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
 }
