@@ -1,11 +1,8 @@
-import { resolve } from 'node:path'
-import type { Plugin } from 'vite'
-import { fileURLToPath } from 'node:url'
-
 import vue from '@vitejs/plugin-vue'
-import { createVueAxiosManager } from '../src/lib'
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import type { Plugin } from 'vite'
 import { defineConfig } from 'vite'
-
 import { compilerOptions } from '../tsconfig.json'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))

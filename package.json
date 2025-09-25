@@ -1,7 +1,7 @@
 {
   "name": "vue-axios-manager",
   "private": false,
-  "version": "1.0.0",
+  "version": "2.0.0-alpha.1",
   "type": "module",
   "description": "Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity",
   "license": "MIT",
@@ -79,6 +79,7 @@
     "mdb-ui-kit": "^9.2.0",
     "pinia": "^3.0.3",
     "rollup": "^4.52.2",
+    "tslib": "^2.8.1",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.44.1",
     "vite": "^7.1.7",
