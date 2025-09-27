@@ -2,11 +2,19 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRequest } from '../../src/lib/composables'
 
+interface Comment {
+  postId: number
+  id: number
+  name: string
+  email: string
+  body: string
+}
+
 export const useComments = defineStore('comments', () => {
-  const comments = ref<{ status: boolean }>()
+  const comments = ref<Comment[]>()
 
   async function handleComments() {
-    const { execute, responseData } = useRequest<{ status: boolean }>('quart', '/v1/test')
+    const { execute, responseData } = useRequest<Comment[]>('quart', '/v1/test')
     await execute()
 
     console.log('useComments.responseData.value', responseData.value)

@@ -7,7 +7,7 @@
     <script type="module">
       import { createApp } from 'vue'
       import { createPinia } from 'pinia'
-      import { createVueAxiosManager } from '../src/lib'
+      import { createVueAxiosManager } from '../src'
 
       import App from './App.vue'
 
@@ -20,14 +20,15 @@
         endpoints: [
           {
             name: 'quart',
-            baseURL: 'https://jsonplaceholder.typicode.com',
+            dev: '127.0.0.1',
+            port: '5000',
             defaultHeaders: {
               'Content-Type': 'application/json',
             }
           },
           {
             name: 'comments',
-            baseURL: 'https://jsonplaceholder.typicode.com/comments',
+            dev: 'jsonplaceholder.typicode.com',
             defaultHeaders: {
               'Content-Type': 'application/json',
             }

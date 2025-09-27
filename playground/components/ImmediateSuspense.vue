@@ -1,6 +1,6 @@
 <template>
   <div class="card-body">
-    <h5>Delayed</h5>
+    <h5>Immediate</h5>
     <p class="card-text">
       {{ responseData }}
     </p>
@@ -9,10 +9,10 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useAsyncRequest } from '../lib/composables'
+import { useAsyncRequest } from '../../src/lib/composables'
 
-const { execute, responseData } = await useAsyncRequest('comments', '/todos/1', {
-  debounce: 10000
+const { execute, responseData } = await useAsyncRequest('comments', '/comments', {
+  immediate: true
 })
 
 onMounted(async () => {

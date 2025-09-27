@@ -2,6 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-5 offset-md-3">
+        <!-- Store + Watch -->
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="alert alert-warning">
@@ -18,6 +19,7 @@
           </div>
         </div>
 
+        <!-- Manual Calls -->
         <div class="card shadow-sm my-2">
           <div class="card-body">
             <button class="btn btn-danger btn-rounded btn-block shadow-none" @click="testInFunction">
@@ -50,6 +52,7 @@
           </div>
         </div>
 
+        <!-- Async Calls -->
         <div class="card">
           <div class="card-body">
             <h1>Suspense</h1>
@@ -82,16 +85,17 @@ import { useComments } from './stores'
 import { storeToRefs } from 'pinia'
 
 const AsyncWithSuspense = defineAsyncComponent({
-  loader: () => import('@/components/WithSuspense.vue')
+  loader: () => import('./components/WithSuspense.vue')
 })
 
 const AsyncImmediateSuspense = defineAsyncComponent({
-  loader: () => import('@/components/ImmediateSuspense.vue')
+  loader: () => import('./components/ImmediateSuspense.vue')
 })
 
 /**
  * Normal usage
  */
+
 const { execute, responseData: normalUsageData } = useRequest('quart', '/v1/test')
 
 async function testExecuteInFunction() {
@@ -101,24 +105,33 @@ async function testExecuteInFunction() {
 /**
  * Abnormal usage: we are obliged to specify the "baseUrl"
  */
+
 async function testInFunction() {
-  const { execute } = useRequest('quart', '/v1/test')
+  const { execute } = useRequest('quart', '/v1/test', {
+    baseUrl: 'http://127.0.0.1:5000'
+  })
   await execute()
 }
 
+/**
+ * Usage with watch
+ */
+
 const count = ref<number>(1)
 const { responseData: watchedResponse } = useRequest('quart', '/v1/test', {
-  watch: count
+  watch: [count]
 })
 
 /**
  * Expect a 401 error in order to test interceptors
  */
+
 const { execute: requestProtected } = useRequest('quart', '/v1/protected')
 
 /**
  * POST request
  */
+
 const { execute: testPostRequest } = useRequest('quart', '/v1/update', {
   method: 'post'
 })
@@ -126,9 +139,14 @@ const { execute: testPostRequest } = useRequest('quart', '/v1/update', {
 /**
  * Authenticated View
  */
+
 const { execute: testAuthenticted } = useRequest('quart', '/v1/authenticated', {
   method: 'post'
 })
+
+/**
+ * Pinia store
+ */
 
 const store = useComments()
 const { comments } = storeToRefs(store)

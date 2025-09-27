@@ -177,7 +177,7 @@ export interface ComposableOptions<T> {
   /**
    * Watch and trigger requests based on a parameter
    */
-  watch?: ArrayableRef<string | number | UnknownRecord<string>>
+  watch?: (Ref<string> | Ref<number> | Ref<UnknownRecord<string>>)[]
   /**
    * Cache the results of the requested API
    */

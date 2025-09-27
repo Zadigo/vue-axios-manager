@@ -26,9 +26,7 @@ function createVueAxiosManagerPluginOption(enableLogging?: boolean, mockApi?: bo
         }
       }
     },
-    configureServer(server) {
-      
-    },
+    configureServer(server) {},
     buildStart() {
       if (enableLogging) {
         console.log('🔧 Vue Axios Manager plugin initialized')
@@ -49,7 +47,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
-      ...resolvePaths(),
+      ...resolvePaths()
     },
     extensions: ['.ts', '.tsx', '.js', '.json'],
   }

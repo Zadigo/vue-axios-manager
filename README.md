@@ -141,7 +141,15 @@ Additonal descriptive label for the endpoint
 
 `dev`
 
-Domain used for the endpoint
+Domain used for the endpoint.
+
+> [!NOTE]
+> ⚠️ Must be a domain only (e.g., `example.com`). Do __not__ include protocol (`http://`) or paths
+
+> [!NOTE]
+> ⚠️ If `dev` is defined alone, only the value in `dev` will be used for the base domain. If `port`
+> defined alone, the final domain will be `127.0.0.1:port`. In that case you only need to specify `dev` or `port`
+> and not both at the same time.
 
 `port`
 
