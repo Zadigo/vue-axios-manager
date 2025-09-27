@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { isRef } from 'vue'
-import { _VueAxiosManager, VueAxiosManager } from '../src/lib'
+import { VueAxiosManager } from '../src'
+import type { _VueAxiosManager } from '../src/lib/types'
 import { fakePluginOptions, mockEndpoint, mockRequest } from './__fixtures__'
 
 describe('Vue Axios Manager', () => {
-  let endpointName: string = 'testendpoint'
+  const endpointName: string = 'testendpoint'
   let instance: _VueAxiosManager
   let fakeApp: unknown
 
@@ -43,7 +44,7 @@ describe('Vue Axios Manager', () => {
     const values = instance._getEndpointValues(endpointName)
 
     expect(values).toBeDefined()
-    
+
     values?.forEach((value) => {
       const keys = Object.keys(value)
       expect(keys).includes('key')

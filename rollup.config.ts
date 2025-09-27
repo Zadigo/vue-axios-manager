@@ -19,9 +19,9 @@ const output = [
     name: 'VueAxiosManager',
     banner,
     globals: {
-      vue: 'Vue',
+      vue: 'Vue'
     },
-    sourcemap: true,
+    sourcemap: true
   },
   {
     file: 'dist/vue-axios-manager.min.js',
@@ -29,22 +29,22 @@ const output = [
     name: 'VueAxiosManager',
     banner,
     globals: {
-      vue: 'Vue',
+      vue: 'Vue'
     },
     plugins: [terser()],
-    sourcemap: true,
+    sourcemap: true
   },
   {
     file: 'dist/vue-axios-manager.mjs',
     format: 'es',
     banner,
-    sourcemap: true,
+    sourcemap: true
   },
   {
     file: 'dist/vue-axios-manager.cjs',
     format: 'cjs',
     banner,
-    sourcemap: true,
+    sourcemap: true
   }
 ]
 
@@ -54,8 +54,8 @@ export default [
     output: output,
     external: [
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {}),
-    ],
+      ...Object.keys(pkg.peerDependencies || {})
+    ]
     // plugins: [
     //   css({ output: 'vue-axios-manager.css' }),
     //   typescript(),
@@ -71,7 +71,7 @@ export default [
       dts({
         rollupTypes: true,
         pathsToAliases: true,
-        declarationOnly: true,
+        declarationOnly: true
       })
     ]
   }

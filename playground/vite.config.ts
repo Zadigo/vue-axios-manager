@@ -11,7 +11,7 @@ const resolvePaths = () => {
   return Object.fromEntries(
     Object.entries(compilerOptions.paths || {}).map(([key, value]) => [
       key.replace('/*', ''),
-      resolve(__dirname, '..', value[0].replace('/*', '')),
+      resolve(__dirname, '..', value[0].replace('/*', ''))
     ])
   )
 }
@@ -42,13 +42,13 @@ export default defineConfig({
   root: resolve(__dirname, './'),
   plugins: [
     vue(),
-    createVueAxiosManagerPluginOption(),
+    createVueAxiosManagerPluginOption()
   ],
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
       ...resolvePaths()
     },
-    extensions: ['.ts', '.tsx', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.json']
   }
 })

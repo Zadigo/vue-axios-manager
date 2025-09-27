@@ -2,17 +2,17 @@ import type { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
 // import type { UseMemoizeOptions } from '@vueuse/core'
 import type { App, Reactive, Ref, ToRefs } from 'vue'
 
-type _Partialize<T> = {
+export type _Partialize<T> = {
   [K in keyof Partial<T>]: T[K]
 }
 
-type UnknownRecord<K extends string> = Record<K, unknown>
+export type UnknownRecord<K extends string> = Record<K, unknown>
 
-type Unefineable<T> = T | undefined
+export type Unefineable<T> = T | undefined
 
-type Arrayable<T> = T[]
+export type Arrayable<T> = T[]
 
-type ArrayableRef<T> = Ref<Arrayable<T>>
+export type ArrayableRef<T> = Ref<Arrayable<T>>
 
 export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean

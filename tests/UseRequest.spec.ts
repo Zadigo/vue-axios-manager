@@ -75,7 +75,7 @@ describe('useRequest composable', () => {
 
     // Verify axios.create was called with correct config
     expect(mockAxios.create).toHaveBeenCalledWith({
-      baseURL: 'http://example.com',
+      baseURL: 'http://example.com'
       // headers: { 'Content-Type': 'application/json' },
       // withCredentials: true,
       // timeout: 20000

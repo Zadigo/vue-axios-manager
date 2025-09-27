@@ -84,6 +84,8 @@ import { useRequest } from '../src/lib/composables'
 import { useComments } from './stores'
 import { storeToRefs } from 'pinia'
 
+let a = 1
+
 const AsyncWithSuspense = defineAsyncComponent({
   loader: () => import('./components/WithSuspense.vue')
 })
