@@ -1,4 +1,4 @@
-import { vueAxiosManager } from './base'
+import { vueAxiosManager } from './manager'
 
 import type { InternalEnpointOptions } from './types'
 

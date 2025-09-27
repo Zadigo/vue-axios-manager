@@ -1,5 +1,6 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import { createAxiosInstance, createInternalEndpointName, inProduction, PluginOptions } from '../src/lib'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { createAxiosInstance, createInternalEndpointName, inProduction } from '../src'
+import type { PluginOptions } from '../src/lib/types'
 
 // import {  } from 'node:inspector'
 

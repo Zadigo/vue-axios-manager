@@ -1,5 +1,5 @@
 import { describe, expect, beforeEach, it, vi } from 'vitest'
-import { createAxiosInstance } from '../src/lib/base'
+import { createAxiosInstance } from '../src/'
 import { PluginOptions } from '../src/lib'
 
 describe('test createAxiosInstance', () => {

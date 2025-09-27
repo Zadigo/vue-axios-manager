@@ -1,7 +1,6 @@
 import { setupDevtoolsPlugin } from '@vue/devtools-api'
-
 import type { App } from 'vue'
-import { vueAxiosManager } from './base'
+import { vueAxiosManager } from './manager'
 
 const inspectorId = 'axios-manager'
 const timelineLayerId = 'axios-manager'
