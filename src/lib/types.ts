@@ -1,5 +1,18 @@
 import type { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
+// import type { UseMemoizeOptions } from '@vueuse/core'
 import type { App, Reactive, Ref, ToRefs } from 'vue'
+
+type _Partialize<T> = {
+  [K in keyof Partial<T>]: T[K]
+}
+
+type UnknownRecord<K extends string> = Record<K, unknown>
+
+type Unefineable<T> = T | undefined
+
+type Arrayable<T> = T[]
+
+type ArrayableRef<T> = Ref<Arrayable<T>>
 
 export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
@@ -45,7 +58,7 @@ export interface EndpointOptions extends SharedOptions {
   dev?: string
   /**
    * Port for the default development domain
-   * @default 8000
+   * @default "8000"
    */
   port?: string
   /**
@@ -128,8 +141,9 @@ export type InternalEndpointOptionKeys = keyof InternalEnpointOptions
 
 export interface ComposableOptions<T> {
   /**
-   * Provide a url to use which will supersede
-   * the endpoint provided
+   * Provide a domain which will supersede
+   * the both the initial domain or dev values
+   * provided for the endpoint
    * ```js
    * const { execute } = useRequest('/path', {
    *  baseUrl: 'http://example.com'
@@ -146,13 +160,13 @@ export interface ComposableOptions<T> {
   /**
    * Request body
    */
-  body?: Record<string, unknown>
+  body?: UnknownRecord<string>
   /**
    * Request query
    */
-  query?: Record<string, unknown>
+  query?: UnknownRecord<string>
   /**
-   * Hook used to execute before the request starts
+   * Hook to execute before the request starts
    */
   beforeStart?: () => void
   /**
@@ -163,7 +177,11 @@ export interface ComposableOptions<T> {
   /**
    * Watch and trigger requests based on a parameter
    */
-  watch?: Ref<T>
+  watch?: ArrayableRef<string | number | UnknownRecord<string>>
+  /**
+   * Cache the results of the requested API
+   */
+  // cache: UseMemoizeOptions<>
 }
 
 export interface AsyncComposableOptions<T> extends ComposableOptions<T> {
@@ -213,9 +231,9 @@ export interface RequestsContainer {
   name: string
   method: Methods
   statusText: string
-  data: Record<string, unknown>
+  data: UnknownRecord<string>
   headers: string
-  path: string | undefined
+  path: Unefineable<string>
 }
 
 /**
@@ -223,7 +241,7 @@ export interface RequestsContainer {
  */
 export interface _DevtoolsTimelineObject {
   key: string
-  value: string | boolean | ExtendedInternalAxiosRequestConfig | undefined
+  value: Unefineable<string | boolean | ExtendedInternalAxiosRequestConfig>
 }
 
 /**
@@ -276,13 +294,13 @@ export interface RefreshApiResponse {
  * @internal
  */
 export interface _VueAxiosManager {
-  pluginOptions: PluginOptions | undefined
+  pluginOptions: Unefineable<PluginOptions>
   endpoints: InternalEnpointOptions[]
   provideAttr: Record<string, InternalEnpointOptions>
   container: Record<string, RequestsContainer[]>
   initialize: (app: App, pluginOptions: PluginOptions) => void
   _getRequests: (name: string) => ToRefs<Reactive<RequestsContainer[]>>
   _getLast: (name: string) => Ref<RequestsContainer>
-  _registerRequest: (method: string, endpoint: EndpointOptions | undefined, params: RequestsContainer, timelineLayerId?: string, isError?: boolean) => void
-  _getEndpointValues: (name: string) => _DevtoolsTimelineObject[] | undefined
+  _registerRequest: (method: string, endpoint: Unefineable<EndpointOptions>, params: RequestsContainer, timelineLayerId?: string, isError?: boolean) => void
+  _getEndpointValues: (name: string) => Unefineable<_DevtoolsTimelineObject[]>
 }

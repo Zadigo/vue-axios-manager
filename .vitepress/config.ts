@@ -2,10 +2,10 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  srcDir: "docs",
-  
-  title: "Vue Axios Manager",
-  description: "Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity",
+  srcDir: 'docs',
+
+  title: 'Vue Axios Manager',
+  description: 'Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -18,6 +18,7 @@ export default defineConfig({
         text: 'Installation & Usage',
         items: [
           { text: 'Getting started', link: '/installation' },
+          { text: 'Endpoints', link: '/endpoints' },
           { text: 'Composables', link: '/composables' },
           { text: 'Contributing', link: '/contributing' },
           { text: 'Markdown Examples', link: '/markdown-examples' },

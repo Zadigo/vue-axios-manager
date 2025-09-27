@@ -44,20 +44,26 @@ app.use(createVueAxiosManager({
   endpoints: [
     {
       name: 'quart',
+      label: 'MyLabel',
       dev: import.meta.env.VITE_QUART_DEV,
       port: '5000',
       domain: 'http://example.com',
-      https: false,
       accessEndpoint: '/v1/token',
       refreshEnpoint: '/v1/refresh-token',
-      label: 'MyLabel',
+      https: false,
+      accessKey: 'some-access-key-name',
+      refreshKey: 'some-refresh-key-name',
+      disableAccess: false,
+      disableRefresh: false,
       axios: {
         withCredentials: true,
         timeout: 20000,
         headers: {
           'Content-Type': 'application/json'
         }
-      }
+      },
+      bearer: 'Token',
+      disableAuth: false
     },
     {
       name: 'comments',
@@ -121,6 +127,70 @@ The name of the cookie key that stores the refresh token, used when refreshing t
 The authorization scheme to use in the `Authorization` header (e.g., `"Bearer"`, `"Token"`, etc.). This value will prefix the access token like so:
 `Authorization: <bearer> <access-token>`
 
+__Endpoint options__
+
+Descriptive list of options used for the endpoint parameter:
+
+`name`
+
+Unique name used to identify the endpoint to be called
+
+`label`
+
+Additonal descriptive label for the endpoint
+
+`dev`
+
+Domain used for the endpoint
+
+`port`
+
+Domains generally have a port. The default one is 8000
+
+`domain`
+
+Domain to use in a producton context
+
+`accessEndpoint`
+
+Path used to generated an access token
+
+`refreshEnpoint`
+
+Path used to generated an refresh token
+
+`https`
+
+Whether to use the development domain in https
+
+`accessKey`
+
+Unique identifier under which to store the access token
+
+`refreshKey`
+
+Unique identifier under which to store the refresh token
+
+`disableAccess`
+
+Whether to disable access token
+
+`disableRefresh`
+
+Whether to disable refresh token
+
+`axios`
+
+Options passed directly to Axios
+
+`bearer`
+
+The key to use in the Authorization header
+
+`disableAuth`
+
+Whether to disable authentication entirely
+
 ### Access Token and Refresh Token Management 🔑
 
 > [!NOTE]
@@ -157,10 +227,11 @@ onMounted(async() => {
 To use it asynchronously with `<Suspense>`:
 
 ```html
-<Suspense>
-  <AsyncMyComponent />
-</Suspense>
 <template>
+  <Suspense>
+    <AsyncMyComponent />
+  </Suspense>
+</template>
 ```
 
 ```html
@@ -187,14 +258,18 @@ Data payload for `POST`, `PUT`, or `PATCH` requests.
 
 `baseUrl`
 
-Override the configured domain entirely
+Overrides the configured domain for the endpoint entirely
 
 > [!NOTE]
-> ⚠️ When specified, both the `domain` and `endpoint` path are ignored
+> ⚠️ When specified, both the `domain` and `dev` values are ignored
 
 `beforeStart`
 
 Callback executed just before the request is made
+
+`completed`
+
+Hook used after the request is completed
 
 `watch`
 

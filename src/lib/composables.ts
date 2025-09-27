@@ -1,4 +1,4 @@
-import { useDebounceFn, watchDebounced } from '@vueuse/core'
+import { useDebounceFn, watchDebounced, isDefined } from '@vueuse/core'
 import { useCookies } from '@vueuse/integrations/useCookies.mjs'
 import axios, { AxiosError } from 'axios'
 import { computed, getCurrentInstance, ref } from 'vue'
@@ -99,7 +99,7 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
  */
 export function useRequest<T>(name: string, path: string, params?: ComposableOptions<T>) {
   const app = getCurrentInstance()
-  const isAppContext = computed(() => app !== null)
+  const isAppContext = computed(() => isDefined(app))
 
   const endpoint = vueAxiosManager.provideAttr[name]
   // console.log('vueAxiosManager', vueAxiosManager.provideAttr[name]?.internalName)
@@ -159,6 +159,15 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
       status.value = 'pending'
 
+      // TODO: Implement memoize for caching
+      // const { load } = useMemoize(async (routePath: string) => {
+      //   if (method == 'get') {
+      //     return await client.get<T>(routePath, { params: params?.query })
+      //   } else {
+      //     return await client[method]<T>(routePath, params?.body)
+      //   }
+      // })
+
       if (method === 'get') {
         response = await client.get<T>(path, { params: params?.query })
       } else {
@@ -214,9 +223,9 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
     }
   }
 
-  // TODO: Infer type
   if (params?.watch) {
     // console.log('useRequest: Watch', params.watch)
+
     watchDebounced(params.watch, async () => {
       await execute()
     }, {
@@ -225,6 +234,12 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
         // console.log('useRequest: Watch', 'Executed')
       }
     })
+
+    // const { trigger } = watchTriggerable(params.watch, async () => {
+    //   const debouncedExecute = useDebounceFn(async () => await execute(), 3000)
+    //   await debouncedExecute()
+    //   await execute()
+    // })
   }
 
   return {
@@ -245,7 +260,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
 /**
  * Async composable with the option of immediately sending the request
- * or delaying the request until a certain time
+ * or delaying it until a certain time
  * @param name The name of the client to use
  * @param path The path to get on the client's domain
  * @param params Additional options for the composable

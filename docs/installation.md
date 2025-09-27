@@ -23,20 +23,26 @@ app.use(createVueAxiosManager({
   endpoints: [
     {
       name: 'quart',
+      label: 'MyLabel',
       dev: import.meta.env.VITE_QUART_DEV,
       port: '5000',
       domain: 'http://example.com',
-      https: false,
       accessEndpoint: '/v1/token',
       refreshEnpoint: '/v1/refresh-token',
-      label: 'MyLabel',
+      https: false,
+      accessKey: 'some-access-key-name',
+      refreshKey: 'some-refresh-key-name',
+      disableAccess: false,
+      disableRefresh: false,
       axios: {
         withCredentials: true,
         timeout: 20000,
         headers: {
           'Content-Type': 'application/json'
         }
-      }
+      },
+      bearer: 'Token',
+      disableAuth: false
     },
     {
       name: 'comments',

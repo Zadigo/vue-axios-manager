@@ -16,7 +16,7 @@ describe('utility functions', () => {
     it('in development should return true', () => {
       expect(inProduction()).toBeFalsy()
     })
-    
+
     it('in production should return true', () => {
       const originalNodeEnv = process.env.NODE_ENV
 
@@ -36,7 +36,7 @@ describe('utility functions', () => {
 describe('Create Axios Instance', () => {
   it('create axios instance should return endpoint configuration', () => {
     const endpoint = createAxiosInstance(pluginOptions, pluginOptions.endpoints[0])
-  
+
     expect(endpoint).toBeTypeOf('object')
 
     // expect(endpoint.instance).toBeInstanceOf(axios.Axios)

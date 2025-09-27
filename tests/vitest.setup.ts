@@ -1,6 +1,13 @@
 import { vi } from 'vitest'
 
-vi.mock('axios')
+vi.mock('axios', async () => {
+  const actual = await vi.importActual<typeof import('axios')>('axios')
+
+  return {
+    ...actual,
+    create: vi.fn()
+  }
+})
 
 vi.mock('@vueuse/core', () => ({
   useDebounceFn: vi.fn((fn, _delay) => fn),

@@ -1,6 +1,7 @@
 import { useDebounceFn } from '@vueuse/core'
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
-import { InternalEnpointOptions, useAsyncRequest, vueAxiosManager } from '../src/lib'
+import { useAsyncRequest, vueAxiosManager } from '../src'
+import type { InternalEnpointOptions } from '../src/lib/types'
 import { mockInternalEndpoint, mockProvideAttr } from './__fixtures__'
 
 import axios from 'axios'

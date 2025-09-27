@@ -134,8 +134,10 @@ export class VueAxiosManager implements _VueAxiosManager {
 export const vueAxiosManager = new VueAxiosManager()
 
 /**
- * Creates a new axios instance with the provided name
- * @param endpoint Endpoint for which the instance should be create
+ * Helper function that Creates a new axios instance for each instance
+ * with the provide name and options
+ * @param pluginOptions Options for the VueAxiosManager plugin
+ * @param endpoint Endpoint options for which the instance should be create
  * @example
  * ```js
  * const result = createAxiosInstance({ name: 'companies' })
@@ -176,11 +178,11 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
     instance
   }
 
-  if (finalOptions.disableAccess === undefined) {
+  if (typeof finalOptions.disableAccess === 'undefined') {
     finalOptions.disableAccess = false
   }
 
-  if (finalOptions.disableRefresh === undefined) {
+  if (typeof finalOptions.disableRefresh === 'undefined') {
     finalOptions.disableRefresh = false
   }
 
