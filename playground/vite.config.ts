@@ -26,7 +26,7 @@ function createVueAxiosManagerPluginOption(enableLogging?: boolean, mockApi?: bo
         }
       }
     },
-    configureServer(server) {},
+    configureServer(_server) {},
     buildStart() {
       if (enableLogging) {
         console.log('🔧 Vue Axios Manager plugin initialized')
