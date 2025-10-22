@@ -247,9 +247,18 @@ export interface _DevtoolsTimelineObject {
   value: Undefineable<string | boolean | ExtendedInternalAxiosRequestConfig>
 }
 
-export interface RefreshApiResponse {
+export interface LoginApiResponse {
+  /**
+   * Access token
+   */
   access: string
+  /**
+   * Refresh token
+   */
+  refresh: string
 }
+
+export type RefreshApiResponse = Omit<LoginApiResponse, 'refresh'>
 
 /**
  * @internal

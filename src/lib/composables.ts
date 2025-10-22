@@ -6,7 +6,7 @@ import { vueAxiosManager } from './manager'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse } from './types'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -92,9 +92,9 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
 }
 
 /**
- * Compsable used to send a request
- * @param name The name of the client to use
- * @param path The path to get on the client's domain
+ * Composable used to send a request
+ * @param name The name of the endpoint to use
+ * @param path The path to get on the endpoint's domain
  * @param params Additional options for the composable
  */
 export function useRequest<T>(name: string, path: string, params?: ComposableOptions<T>) {
@@ -261,8 +261,8 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 /**
  * Async composable with the option of immediately sending the request
  * or delaying it until a certain time
- * @param name The name of the client to use
- * @param path The path to get on the client's domain
+ * @param name The name of the endpoint to use
+ * @param path The path to get on the endpoint's domain
  * @param params Additional options for the composable
  */
 export async function useAsyncRequest<T>(name: string, path: string, params?: AsyncComposableOptions<T>) {
@@ -299,6 +299,53 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
   }
 }
 
+// TODO: useUser, useCredentials
+
+// export type BaseUser<T> = {
+//   [K in keyof T]: T[K]
+// }
+
+// export const useUser = createGlobalState(<T extends BaseUser<T>>() => {
+//   const user = ref<T>()
+
+//   return {
+//     user
+//   }
+// })
+
+// export const useAccessToken = createGlobalState(() => {
+//   const { get } = useCookies()
+//   const getAccessToken = reactify(get)
+//   const access = getAccessToken('access') as ComputedRef<Undefineable<string>>
+//   const { history } = useDebouncedRefHistory(access, { capacity: 3, deep: false })
+
+//   return {
+//     access,
+//     history
+//   }
+// })
+
+// export type BaseJwt = {
+//   id: number
+//   exp: number
+//   iat: number
+// }
+
+// export const useUserId = createGlobalState(<T extends BaseJwt>() => {
+//   const { access } = useAccessToken()
+
+//   const userId = computed(() => {
+//     if (isDefined(access.value)) {
+//       const { payload } = useJwt<T>(access.value as string)
+//       return payload.value?.id
+//     }
+//   })
+
+//   return {
+//     userId
+//   }
+// })
+
 /**
  * Composable to log a user into the application
  * @param credentials The crendentials with which to log the user in
@@ -306,7 +353,7 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
  * @param path The path to log the client in
  * @param params The parameters for the request
  */
-export async function useAxiosLogin<T>(credentials: Credentials, clientName: string, path: string, params?: LoginComposableOptions<T>): Promise<Ref<T | unknown>> {
+export async function useAxiosLogin<T = LoginApiResponse>(credentials: Credentials, clientName: string, path: string, params?: LoginComposableOptions<T>): Promise<Ref<T | undefined>> {
   const { execute, responseData } = useRequest<T>(clientName, path, { method: 'post', body: credentials, ...params })
   await execute()
   return responseData
