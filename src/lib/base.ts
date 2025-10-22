@@ -1,6 +1,6 @@
 import type { Plugin } from 'vue'
 import { markRaw } from 'vue'
-import { setupAxiosManagerDevtools } from './devtools'
+// import { setupAxiosManagerDevtools } from './devtools'
 import { vueAxiosManager } from './manager'
 import type { PluginOptions } from './types'
 import { inProduction } from './utils'
@@ -22,7 +22,7 @@ export function createVueAxiosManager(options: PluginOptions): Plugin {
 
       if (!inProduction()) {
         // window.VueAxiosManager = vueAxiosManager
-        setupAxiosManagerDevtools(app)
+        // setupAxiosManagerDevtools(app)
       }
     }
   }

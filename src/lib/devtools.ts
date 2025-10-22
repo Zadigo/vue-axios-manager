@@ -1,6 +1,6 @@
 import { setupDevtoolsPlugin } from '@vue/devtools-api'
 import type { App } from 'vue'
-import { vueAxiosManager } from './manager'
+// import { vueAxiosManager } from './manager'
 
 const inspectorId = 'axios-manager'
 const timelineLayerId = 'axios-manager'
@@ -18,7 +18,7 @@ export function setupAxiosManagerDevtools(app: App) {
   }, (api) => {
     // https://devtools-v6.vuejs.org/plugin/plugins-guide.html#custom-inspector
 
-    vueAxiosManager.api = api
+    // vueAxiosManager.api = api
 
     api.addInspector({
       id: inspectorId,
@@ -28,35 +28,35 @@ export function setupAxiosManagerDevtools(app: App) {
 
     // Inspector Tree
 
-    api.on.getInspectorTree((payload) => {
-      if (payload.inspectorId === inspectorId) {
-        let rootNodes = []
+    // api.on.getInspectorTree((payload) => {
+    //   if (payload.inspectorId === inspectorId) {
+    //     let rootNodes = []
 
-        rootNodes = vueAxiosManager.endpoints.map(endpoint => ({
-          id: endpoint.name,
-          label: endpoint.name,
-          tags: [
-            {
-              label: endpoint.label?.toLowerCase().trim() || 'Axios',
-              textColor: 0xffffff,
-              backgroundColor: 0x000000
-            }
-          ]
-        }))
+    //     rootNodes = vueAxiosManager.endpoints.map(endpoint => ({
+    //       id: endpoint.name,
+    //       label: endpoint.name,
+    //       tags: [
+    //         {
+    //           label: endpoint.label?.toLowerCase().trim() || 'Axios',
+    //           textColor: 0xffffff,
+    //           backgroundColor: 0x000000
+    //         }
+    //       ]
+    //     }))
 
-        payload.rootNodes = rootNodes
-      }
-    })
+    //     payload.rootNodes = rootNodes
+    //   }
+    // })
 
-    api.on.getInspectorState((payload) => {
-      if (payload.inspectorId === inspectorId) {
-        const options = vueAxiosManager._getEndpointValues(payload.nodeId)
+    // api.on.getInspectorState((payload) => {
+    //   if (payload.inspectorId === inspectorId) {
+    //     const options = vueAxiosManager._getEndpointValues(payload.nodeId)
 
-        payload.state = {
-          options: options || []
-        }
-      }
-    })
+    //     payload.state = {
+    //       options: options || []
+    //     }
+    //   }
+    // })
 
     // Timeline
 

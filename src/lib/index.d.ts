@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
 import { vueAxiosManager } from './manager'
 
 import type { InternalEnpointOptions } from './types'
@@ -9,7 +11,7 @@ declare global {
 }
 
 declare module 'vue' {
-  interface GlobalComponents { }
+  interface GlobalComponents {}
 
   export interface ComponentCustomProperties {
     $axiosEndpoints: Record<string, InternalEnpointOptions>
