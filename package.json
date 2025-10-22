@@ -54,8 +54,8 @@
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
-    "publish": "pnpm run lint && git push && git push --tags && rollup -c && pnpm run docs:build && pnpm publish",
-    "publish:alpha": "pnpm run lint && git push && git push --tags && rollup -c && pnpm run docs:build && pnpm publish --tag alpha",
+    "publish": "pnpm run lint && git push && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish",
+    "publish:alpha": "pnpm run lint && git push && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish --tag alpha",
     "lint": "eslint ."
   },
   "dependencies": {
