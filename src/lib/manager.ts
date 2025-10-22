@@ -105,7 +105,7 @@ export class VueAxiosManager implements _VueAxiosManager {
     const option = this.endpoints.find(item => item.name === name)
     const optionsForDevtool: _DevtoolsTimelineObject[] = []
 
-    // // console.log('RequestStore: : option', option)
+    // console.log('RequestStore: : option', option)
 
     if (option) {
       const keys = Object.keys(option) as InternalEndpointOptionKeys[]

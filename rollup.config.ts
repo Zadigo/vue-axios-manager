@@ -69,9 +69,10 @@ export default [
     plugins: [
       typescript(),
       dts({
-        rollupTypes: true,
+        rollupTypes: false,
         pathsToAliases: true,
-        declarationOnly: true
+        declarationOnly: true,
+        exclude: ['**/tests/**', '**/*.test.ts', 'src/devtools.ts']
       })
     ]
   }

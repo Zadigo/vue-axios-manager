@@ -1,5 +1,5 @@
 import { isDefined, useDebounceFn, watchDebounced } from '@vueuse/core'
-import { useCookies } from '@vueuse/integrations/useCookies.mjs'
+import { useCookies } from '@vueuse/integrations/dist/useCookies'
 import axios, { AxiosError } from 'axios'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { vueAxiosManager } from './manager'

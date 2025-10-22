@@ -1,5 +1,4 @@
 import type { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
-// import type { UseMemoizeOptions } from '@vueuse/core'
 import type { App, Reactive, Ref, ToRefs } from 'vue'
 
 export type _Partialize<T> = {
@@ -8,17 +7,21 @@ export type _Partialize<T> = {
 
 export type UnknownRecord<K extends string> = Record<K, unknown>
 
-export type Unefineable<T> = T | undefined
+export type Undefineable<T> = T | undefined
+
+export type Nullable<T> = T | null
+
+export type Empty<T> = Undefineable<T> | Nullable<T>
 
 export type Arrayable<T> = T[]
 
 export type ArrayableRef<T> = Ref<Arrayable<T>>
 
+type InternalAxiosRequestConfig = Omit<AxiosRequestConfig, 'baseURL' | 'data' | 'params' | 'method' | 'url'>
+
 export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
 }
-
-type InternalAxiosRequestConfig = Omit<AxiosRequestConfig, 'baseURL' | 'data' | 'params' | 'method' | 'url'>
 
 interface SharedOptions {
   /**
@@ -204,7 +207,7 @@ export type LoginComposableOptions<T> = Omit<ComposableOptions<T>, 'method' | 'b
  */
 export type Methods = 'get' | 'post' | 'delete' | 'put' | 'patch'
 
-export interface Credentials extends Record<string, string | undefined> {
+export interface Credentials extends Record<string, Undefineable<string>> {
   /**
    * Username to use
    */
@@ -233,7 +236,7 @@ export interface RequestsContainer {
   statusText: string
   data: UnknownRecord<string>
   headers: string
-  path: Unefineable<string>
+  path: Undefineable<string>
 }
 
 /**
@@ -241,49 +244,7 @@ export interface RequestsContainer {
  */
 export interface _DevtoolsTimelineObject {
   key: string
-  value: Unefineable<string | boolean | ExtendedInternalAxiosRequestConfig>
-}
-
-/**
- * Class that stores all the requests sent
- * @internal
- */
-export interface RequestStoreClass {
-  /**
-   * Name of the instances created by the user
-   */
-  instanceNames: string[]
-  /**
-   * Last request sent
-   */
-  last: RequestsContainer
-  /**
-   * Container for the requests sent
-   */
-  container: RequestsContainer[]
-  /**
-   * Devtools Api
-   */
-  api: unknown
-  /**
-   * Returns a new endpoint
-   * @param name Endpoint name
-   */
-  getEndpointValues: (name: string) => _DevtoolsTimelineObject[]
-  /**
-   * Filters requests by name
-   * @param name Endpoint name
-   */
-  filterByName: (name: string) => RequestsContainer[]
-  /**
-   * Registers a new endpoint
-   * @param name Endpoint name
-   */
-  registerName: (name: string) => void
-  /**
-   * Registers a new request
-   */
-  registerRequest: (params: RequestsContainer) => void
+  value: Undefineable<string | boolean | ExtendedInternalAxiosRequestConfig>
 }
 
 export interface RefreshApiResponse {
@@ -294,13 +255,14 @@ export interface RefreshApiResponse {
  * @internal
  */
 export interface _VueAxiosManager {
-  pluginOptions: Unefineable<PluginOptions>
+  pluginOptions: Undefineable<PluginOptions>
   endpoints: InternalEnpointOptions[]
   provideAttr: Record<string, InternalEnpointOptions>
+  api: unknown
   container: Record<string, RequestsContainer[]>
   initialize: (app: App, pluginOptions: PluginOptions) => void
   _getRequests: (name: string) => ToRefs<Reactive<RequestsContainer[]>>
   _getLast: (name: string) => Ref<RequestsContainer>
-  _registerRequest: (method: string, endpoint: Unefineable<EndpointOptions>, params: RequestsContainer, timelineLayerId?: string, isError?: boolean) => void
-  _getEndpointValues: (name: string) => Unefineable<_DevtoolsTimelineObject[]>
+  _registerRequest: (method: string, endpoint: Undefineable<EndpointOptions>, params: RequestsContainer, timelineLayerId?: string, isError?: boolean) => void
+  _getEndpointValues: (name: string) => Undefineable<_DevtoolsTimelineObject[]>
 }
