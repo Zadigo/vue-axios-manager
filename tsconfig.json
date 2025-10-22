@@ -4,6 +4,7 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "moduleResolution": "node",
+    "target": "esnext",
     "outDir": "dist",
     "lib": [
       "esnext",

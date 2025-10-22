@@ -8,6 +8,7 @@
   "readme": "README.md",
   "source": "src/index.ts",
   "main": "dist/vue-axios-manager.js",
+  "module": "dist/vue-axios-manager.mjs",
   "types": "dist/vue-axios-manager.d.ts",
   "sideEffects": false,
   "keywords": [
@@ -37,8 +38,7 @@
       "require": "./dist/vue-axios-manager.js",
       "import": "./dist/vue-axios-manager.mjs",
       "default": "./dist/vue-axios-manager.mjs"
-    },
-    "./dist/*": "./dist/*"
+    }
   },
   "scripts": {
     "dev": "vite playground",
