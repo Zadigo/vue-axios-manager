@@ -4,7 +4,7 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "outDir": "dist",
     "lib": [
       "esnext",
       "dom",
@@ -25,9 +25,6 @@
     ]
   },
   "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
+    "src/**/*"
   ]
 }

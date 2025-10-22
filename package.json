@@ -6,11 +6,10 @@
   "description": "Vue Axios Manager is a lightweight plugin that enables you to manage multiple Axios endpoints in any Vue application with ease and clarity",
   "license": "MIT",
   "readme": "README.md",
-  "main": "dist/vue-axios-manager.cjs",
-  "module": "dist/vue-axios-manager.mjs",
+  "source": "src/index.ts",
+  "main": "dist/vue-axios-manager.js",
   "types": "dist/vue-axios-manager.d.ts",
-  "unpkg": "dist/vue-axios-manager.min.js",
-  "jsdelivr": "dist/vue-axios-manager.min.js",
+  "sideEffects": false,
   "keywords": [
     "Axios",
     "Vue 3",
@@ -32,22 +31,18 @@
   "bugs": {
     "url": "https://github.com/Zadigo/vue-axios-manager/issues"
   },
-  "peerDependencies": {
-    "axios": "^1.10.0",
-    "vue": "^3.5.17"
-  },
   "exports": {
     ".": {
       "types": "./dist/vue-axios-manager.d.ts",
-      "import": "./dist/vue-axios-manager.js",
-      "require": "./dist/vue-axios-manager.cjs",
+      "require": "./dist/vue-axios-manager.js",
+      "import": "./dist/vue-axios-manager.mjs",
       "default": "./dist/vue-axios-manager.mjs"
     },
     "./dist/*": "./dist/*"
   },
   "scripts": {
     "dev": "vite playground",
-    "build": "rollup -c",
+    "build": "rollup -c rollup.config.mjs",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch --coverage",
     "preview": "vite preview",
@@ -58,7 +53,12 @@
     "publish:alpha": "pnpm run lint && git push && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish --tag alpha",
     "lint": "eslint ."
   },
+  "peerDependencies": {
+    "axios": "^1.10.0",
+    "vue": "^3.5.17"
+  },
   "dependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@vueuse/core": "^14.0.0",
     "@vueuse/integrations": "^14.0.0",
     "universal-cookie": "^8.0.1"
@@ -83,11 +83,11 @@
     "mdb-ui-kit": "^9.2.0",
     "pinia": "^3.0.3",
     "rollup": "^4.52.5",
+    "rollup-plugin-dts": "^6.2.3",
     "tslib": "^2.8.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.2",
     "vite": "^7.1.11",
-    "vite-plugin-dts": "^4.5.4",
     "vite-plugin-eslint": "^1.8.1",
     "vitepress": "2.0.0-alpha.12",
     "vitest": "^4.0.0",
