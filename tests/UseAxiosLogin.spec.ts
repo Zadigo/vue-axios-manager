@@ -6,7 +6,7 @@ import axios from 'axios'
 const mockAxios = vi.mocked(axios)
 
 describe.skip('useAxiosLogin', () => {
-  let mockAxiosInstance: any
+  let mockAxiosInstance: unknown
 
   beforeEach(() => {
     // Create a mock axios instance

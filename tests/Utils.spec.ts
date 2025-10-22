@@ -30,7 +30,7 @@ describe('utility functions', () => {
   describe('createInternalEndpointName function', () => {
     it('should return examplename as $examplenameAxios', () => {
       expect(createInternalEndpointName('examplename')).toEqual('$examplenameAxios')
-    }) 
+    })
   })
 })
 

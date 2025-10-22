@@ -19,7 +19,7 @@ vi.spyOn(vueAxiosManager, 'initialize').mockImplementation(() => {
 })
 
 describe('useAsyncRequest', () => {
-  let mockAxiosInstance: any
+  let mockAxiosInstance: unknown
 
   beforeEach(() => {
     // Create a mock axios instance
