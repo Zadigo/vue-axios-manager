@@ -1,6 +1,12 @@
 <template>
   <div class="container">
     <div class="row">
+      <div class="col-sm-12 col-md-8">
+        <user-composable />
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col-md-5 offset-md-3">
         <!-- Store + Watch -->
         <div class="card shadow-sm">
@@ -83,6 +89,7 @@
 </template>
 
 <script setup lang="ts">
+import UserComposable from './components/UserComposable.vue'
 import { defineAsyncComponent, ref } from 'vue'
 import { useRequest } from '../src/lib/composables'
 import { useComments } from './stores'

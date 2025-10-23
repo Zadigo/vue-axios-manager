@@ -1,9 +1,16 @@
-## Version 2.00.0-beta.2 (2025-10-30)
+## Version 2.00.0-rc.1 (2025-10-30)
 
 ### Features
 
-- [ ] Add a `useUserId` global composable to get the current authenticated user's ID
-- [ ] Add a `useAccessToken` global composable to return the access token in any Vue template
+- [ ] Allow the user to directly refresh the access token in a Vue template manually
+
+
+## Version 2.00.0-beta.2 (2025-10-23)
+
+### Features
+
+- [x] Add a `useUser` global composable to get the current authenticated user's ID
+- [x] Add a `useAccessToken` global composable to return the access token in any Vue template
 - [ ] Allow the user to directly refresh the access token in a Vue template manually
 
 ## Version 2.00.0-beta.1 (2025-10-15)

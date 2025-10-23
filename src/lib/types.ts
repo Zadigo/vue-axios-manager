@@ -275,3 +275,13 @@ export interface _VueAxiosManager {
   _registerRequest: (method: string, endpoint: Undefineable<EndpointOptions>, params: RequestsContainer, timelineLayerId?: string, isError?: boolean) => void
   _getEndpointValues: (name: string) => Undefineable<_DevtoolsTimelineObject[]>
 }
+
+/**
+ * @description Basic JWT structure
+ */
+export type BaseJwt = {
+  exp: number
+  iat: number
+}
+
+export type ExtendedJwt<T> = T & BaseJwt

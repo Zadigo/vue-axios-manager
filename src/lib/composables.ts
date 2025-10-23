@@ -1,12 +1,13 @@
-import { isDefined, useDebounceFn, watchDebounced } from '@vueuse/core'
+import { createGlobalState, isDefined, reactify, useDebouncedRefHistory, useDebounceFn, watchDebounced } from '@vueuse/core'
+import { useJwt } from '@vueuse/integrations'
 import axios, { AxiosError } from 'axios'
 import cookie from 'universal-cookie'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { vueAxiosManager } from './manager'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-import type { Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, Undefineable } from './types'
+import type { ComputedRef, Ref } from 'vue'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, ExtendedJwt, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, Undefineable } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -327,53 +328,6 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
   }
 }
 
-// TODO: useUser, useCredentials
-
-// export type BaseUser<T> = {
-//   [K in keyof T]: T[K]
-// }
-
-// export const useUser = createGlobalState(<T extends BaseUser<T>>() => {
-//   const user = ref<T>()
-
-//   return {
-//     user
-//   }
-// })
-
-// export const useAccessToken = createGlobalState(() => {
-//   const { get } = useCookies()
-//   const getAccessToken = reactify(get)
-//   const access = getAccessToken('access') as ComputedRef<Undefineable<string>>
-//   const { history } = useDebouncedRefHistory(access, { capacity: 3, deep: false })
-
-//   return {
-//     access,
-//     history
-//   }
-// })
-
-// export type BaseJwt = {
-//   id: number
-//   exp: number
-//   iat: number
-// }
-
-// export const useUserId = createGlobalState(<T extends BaseJwt>() => {
-//   const { access } = useAccessToken()
-
-//   const userId = computed(() => {
-//     if (isDefined(access.value)) {
-//       const { payload } = useJwt<T>(access.value as string)
-//       return payload.value?.id
-//     }
-//   })
-
-//   return {
-//     userId
-//   }
-// })
-
 /**
  * Composable to log a user into the application
  * @param credentials The crendentials with which to log the user in
@@ -386,3 +340,57 @@ export async function useAxiosLogin<T = LoginApiResponse>(credentials: Credentia
   await execute()
   return responseData
 }
+
+/**
+ * Composable to retrieve the access token from the cookies
+ * and maintain a history of the last three access tokens
+ * @private v2.1.0
+ */
+export const useAccessToken = createGlobalState(() => {
+  const getAccessToken = reactify(getFromCookie)
+  const access = getAccessToken('access') as ComputedRef<Undefineable<string>>
+  const { history } = useDebouncedRefHistory(access, { capacity: 3, deep: false })
+
+  return {
+    /**
+     * The current access token
+     * @default undefined
+     */
+    access,
+    /**
+     * History of the last three access tokens
+     * @default []
+     */
+    history
+  }
+})
+
+/**
+ * Composable to retrieve the user id from the JWT access token
+ * and makes it available globally
+ * @private v2.1.0
+ */
+export const useUser = createGlobalState(<T>(column?: keyof T) => {
+  const { access } = useAccessToken()
+  const { payload } = useJwt<ExtendedJwt<T>>(access.value as string)
+
+  const id = computed(() => {
+    if (isDefined(payload)) {
+      const columnName = column || 'id'
+      // @ts-expect-error Dynamic key access
+      return payload.value[columnName]
+    } else {
+      return undefined
+    }
+  })
+
+  // console.log('useUser: jwtPayload', payload.value)
+
+  return {
+    /**
+     * The user id from the JWT access token
+     * @default undefined
+     */
+    id
+  }
+})

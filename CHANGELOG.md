@@ -1,3 +1,11 @@
+## Version 2.00.0-beta.2 (2025-10-23)
+
+### Features
+
+- Add private `useUser` composable for user management
+- Add private `useAccessToken` composable for access token management
+- Update package dependencies to latest versions
+
 ## Version 2.00.0-beta.1 (2025-10-23)
 
 ### Features

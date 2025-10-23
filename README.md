@@ -18,7 +18,7 @@ centralized configuration and provides simple composables to invoke them consist
 ## Features ✨
 
 - ⛰ Vue 3 ready
-- ✨ Centralizes all API endpoints via intuitive [composables](#composables)
+- ✨ Centralizes all API endpoints via intuitive [composables](##composables)
 - 🔑 Built-in support for __automatic access and refresh token handling__
 
 ## 👉🏽 [Demo with Vue 3 on StackBlitz](https://stackblitz.com/github/piniajs/example-vue-3-vite)
