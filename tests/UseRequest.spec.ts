@@ -1,11 +1,9 @@
-import { watchDebounced } from '@vueuse/core'
-import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ref } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useRequest, vueAxiosManager } from '../src'
 import type { InternalEnpointOptions } from '../src/lib/types'
-import { mockInternalEndpoint, mockProvideAttr } from './__fixtures__'
+import { mockInternalEndpoint } from './__fixtures__'
 
-import axios from 'axios'
+// import axios from 'axios'
 
 const mockedManager = vi.mocked(vueAxiosManager)
 console.log('mockedManager', mockedManager)
