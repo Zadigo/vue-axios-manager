@@ -20,6 +20,7 @@ export default defineConfig({
           { text: 'Getting started', link: '/installation' },
           { text: 'Endpoints', link: '/endpoints' },
           { text: 'Composables', link: '/composables' },
+          { text: 'Authentication Flow', link: '/authentication-flow' },
           { text: 'Contributing', link: '/contributing' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' }
