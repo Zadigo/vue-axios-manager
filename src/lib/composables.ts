@@ -134,12 +134,13 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
     throw new Error(`Endpoint with with name ${name} does not exist`)
   }
 
+  // Initial client from the endpoint
   let client = endpoint.instance
 
   // console.log('vueAxiosManager', vueAxiosManager)
 
   // baseUrl allows the user to override
-  // the initial client entirely for this
+  // the initial endpoint url entirely for this
   // request -; this creates a new client
   if (params?.baseUrl) {
     client = axios.create({
