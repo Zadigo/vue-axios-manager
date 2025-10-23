@@ -32,8 +32,10 @@ function setInCookie(key: string, value: string) {
 
 /**
  * Adds an access token to the request on authentication
- * tokens obtained for authenticating the user
- * @param request The request configuration
+ * tokens obtained for authenticating the user. The "Authorization" header
+ * is added to the request only if an access token is found in the cookies
+ * @param options The plugin options
+ * @param endpoint The endpoint options
  */
 function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpointOptions) {
   return (request: InternalAxiosRequestConfig) => {
@@ -71,6 +73,7 @@ async function responseInterceptor(response: AxiosResponse) {
  * Creates an interceptor for automatically refreshing
  * access tokens created via authentication for users
  * @param domain The url domain for the request
+ * @param endpoint The endpoint options
  */
 function responseErrorInterceptor(domain: string | undefined, endpoint: InternalEnpointOptions) {
   return async (error: unknown) => {
