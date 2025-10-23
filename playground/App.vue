@@ -22,24 +22,28 @@
         <!-- Manual Calls -->
         <div class="card shadow-sm my-2">
           <div class="card-body">
-            <button class="btn btn-danger btn-rounded btn-block shadow-none" @click="testInFunction">
-              Test composable in function
+            <button class="btn btn-info btn-rounded btn-block shadow-none" @click="testExecuteInFunction">
+              Normal usage
             </button>
 
-            <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="testExecuteInFunction">
-              Test execute in function
+            <button class="btn btn-info btn-rounded btn-block shadow-none" @click="testInFunction">
+              Abnormal usage
+            </button>
+            
+            <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="store.handleComments">
+              Test from Pinia
             </button>
 
-            <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="() => count += 1">
+            <hr>
+
+            <button class="btn btn-primary btn-rounded btn-block shadow-none" @click="() => updateCount()">
               Test with watch
             </button>
 
+            <hr>
+
             <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="requestProtected">
               Test protected
-            </button>
-
-            <button class="btn btn-warning btn-rounded btn-block shadow-none" @click="store.handleComments">
-              Test from Pinia
             </button>
 
             <button class="btn btn-warning btn-rounded btn-primary btn-block shadow-none" @click="testPostRequest">
@@ -83,8 +87,7 @@ import { defineAsyncComponent, ref } from 'vue'
 import { useRequest } from '../src/lib/composables'
 import { useComments } from './stores'
 import { storeToRefs } from 'pinia'
-
-let a = 1
+import { useCounter, useUrlSearchParams } from '@vueuse/core'
 
 const AsyncWithSuspense = defineAsyncComponent({
   loader: () => import('./components/WithSuspense.vue')
@@ -96,6 +99,7 @@ const AsyncImmediateSuspense = defineAsyncComponent({
 
 /**
  * Normal usage
+ * @description The composable is used at the top level of the script setup
  */
 
 const { execute, responseData: normalUsageData } = useRequest('quart', '/v1/test')
@@ -105,27 +109,37 @@ async function testExecuteInFunction() {
 }
 
 /**
- * Abnormal usage: we are obliged to specify the "baseUrl"
+ * Abnormal usage
+ * @description The composable is used inside a function. We are obliged to specify the "baseUrl"
  */
 
 async function testInFunction() {
   const { execute } = useRequest('quart', '/v1/test', {
-    baseUrl: 'http://127.0.0.1:5000'
+    // baseUrl: 'http://127.0.0.1:5001'
   })
   await execute()
 }
 
 /**
  * Usage with watch
+ * @description When the watch changes, the request should be re-executed
  */
 
-const count = ref<number>(1)
+const { count, inc } = useCounter(1)
+const queryParams = useUrlSearchParams('history') as { count: string }
+
 const { responseData: watchedResponse } = useRequest('quart', '/v1/test', {
   watch: [count]
 })
 
+function updateCount() {
+  inc()
+  queryParams.count = count.value.toString()
+}
+
 /**
  * Expect a 401 error in order to test interceptors
+ * @description Forces a 401 error. This should then trigger the refresh authentication interceptors
  */
 
 const { execute: requestProtected } = useRequest('quart', '/v1/protected')
