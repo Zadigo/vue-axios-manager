@@ -201,6 +201,9 @@ Whether to disable authentication entirely
 
 ### Access Token and Refresh Token Management 🔑
 
+The access and refresh token workflow work only if an access/refresh tokens are found in the cookies.
+Whenever a 401 Unauthorized error is encountered, Vue Axios Manager automatically attempts to refresh the access token.
+
 > [!NOTE]
 > ✅ When a `401 Unauthorized` error occurs and both `accessEndpoint` and `refreshEndpoint` are defined, Vue Axios Manager automatically handles token refreshing and retries the original request
 
