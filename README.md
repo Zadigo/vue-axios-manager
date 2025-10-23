@@ -25,14 +25,15 @@ centralized configuration and provides simple composables to invoke them consist
 
 ## Installation 🏠
 
-```typescript
+```bash
 npm i @vue-axios-manager
 ```
 
 Or,
 
-```typescript
+```bash
 pnpm i @vue-axios-manager
+pnpm add -D change-case drauu fuse.js idb-keyval sortablejs async-validator focus-trap jwt-decode nprogress qrcode
 ```
 
 Then register the plugin in your Vue application:

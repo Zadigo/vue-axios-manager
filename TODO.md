@@ -3,6 +3,8 @@
 ### Features
 
 - [ ] Allow the user to directly refresh the access token in a Vue template manually
+- [ ] By importing `useJwt` from `@vueuse/integrations` we are forced to install all of `change-case drauu fuse.js idb-keyval sortablejs async-validator focus-trap jwt-decode nprogress qrcode`
+      which is way too much. We only need `jwt-decode`
 
 
 ## Version 2.00.0-beta.2 (2025-10-23)
