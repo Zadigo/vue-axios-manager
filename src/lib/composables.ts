@@ -2,12 +2,13 @@ import { isDefined, useDebounceFn, watchDebounced } from '@vueuse/core'
 // import { useCookies } from '@vueuse/integrations/useCookies'
 import cookie from 'universal-cookie'
 import axios, { AxiosError } from 'axios'
+import cookie from 'universal-cookie'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { vueAxiosManager } from './manager'
 
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse } from './types'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, Undefineable } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
