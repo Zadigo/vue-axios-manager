@@ -11,7 +11,7 @@ console.log('mockedManager', mockedManager)
 vi.mock('axios', async () => {
   return {
     default: {
-      create: vi.fn().mockReturnValue(options => ({
+      create: vi.fn().mockReturnValue(() => ({
         get: vi.fn().mockResolvedValue({ data: { data: 'test' } }),
         post: vi.fn(),
         put: vi.fn(),
