@@ -1,5 +1,6 @@
 import { isDefined, useDebounceFn, watchDebounced } from '@vueuse/core'
-import { useCookies } from '@vueuse/integrations/dist/useCookies'
+// import { useCookies } from '@vueuse/integrations/useCookies'
+import cookie from 'universal-cookie'
 import axios, { AxiosError } from 'axios'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { vueAxiosManager } from './manager'
@@ -11,16 +12,36 @@ import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedIn
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
 /**
+ * Retrieves a value from a cookie
+ * @param key The value to return from the cookie
+ */
+function getFromCookie<T extends Undefineable<string>>(key: string): T {
+  const instance = new cookie()
+  return instance.get(key) as T
+}
+
+/**
+ * The value to set in a cookie
+ * @param key The key to set in the cookie
+ * @param value The value to set in the cookie
+ */
+function setInCookie(key: string, value: string) {
+  const instance = new cookie()
+  instance.set(key, value, { secure: true, sameSite: 'strict', path: '/' })
+}
+
+/**
  * Adds an access token to the request on authentication
  * tokens obtained for authenticating the user
  * @param request The request configuration
  */
 function requestInterceptor(options: PluginOptions | undefined, endpoint: InternalEnpointOptions) {
   return (request: InternalAxiosRequestConfig) => {
-    const { get } = useCookies()
+    // const { get } = useCookies()
 
     const bearer = endpoint.bearer || options?.bearer || 'Token'
-    const access = get(endpoint.accessKey || 'access')
+    // const access = get(endpoint.accessKey || 'access')
+    const access = getFromCookie<string>(endpoint.accessKey || 'access')
 
     if (access && !endpoint.disableAccess) {
       request.headers.Authorization = `${bearer} ${access}`
@@ -69,8 +90,9 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
             const accessTokenKey = endpoint.accessKey || 'access'
             const refreshTokenKey = endpoint.refreshKey || 'refresh'
 
-            const { get, set } = useCookies([accessTokenKey, refreshTokenKey])
-            const refresh = get<string | undefined>(refreshTokenKey)
+            // const { get, set } = useCookies([accessTokenKey, refreshTokenKey])
+            // const refresh = get<string | undefined>(refreshTokenKey)
+            const refresh = getFromCookie(refreshTokenKey)
 
             // console.log('responseErrorInterceptor: Refresh', refresh)
 
@@ -78,7 +100,8 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
             const refreshTokenEndpoint = endpoint.refreshEnpoint || '/auth/v1/token/refresh/'
             const response = await refreshClient.post<RefreshApiResponse>(refreshTokenEndpoint, { refresh })
 
-            set(accessTokenKey, response.data.access, { secure: true, sameSite: 'strict' })
+            // set(accessTokenKey, response.data.access, { secure: true, sameSite: 'strict' })
+            setInCookie(accessTokenKey, response.data.access)
 
             return refreshClient
           } catch (refreshError) {
