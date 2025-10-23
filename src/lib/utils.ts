@@ -48,6 +48,10 @@ export function checkDomain(domain: string, endpoint: EndpointOptions) {
  */
 export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: EndpointOptions): InternalEnpointOptions {
   const protocole = endpoint.https ? 'https' : 'http'
+  // TODO: This is confusing. It's either the user puts "dev" with the port
+  // or just the port alone which creates the url with the port. We should standardize this:
+  // - either remove port completely and force the user to put "dev" with the port
+  // - or keep both but "dev" is just the domain without the port
   const devDomain = endpoint.dev || `127.0.0.1:${endpoint.port || 8000}`
 
   checkDomain(devDomain, endpoint)
