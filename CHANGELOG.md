@@ -1,3 +1,13 @@
+## Version 2.00.0-beta.1 (2025-10-23)
+
+### Features
+
+- Refactor package structure which did not render "dist" folder correctly
+- Refactor project types
+- Improve test coverage and reliability
+- Update dependencies to latest versions
+- Refactor src structure (removing index.ts)
+
 ## Version 2.00.0-alpha.1 (2025-10-15)
 
 ### Features
