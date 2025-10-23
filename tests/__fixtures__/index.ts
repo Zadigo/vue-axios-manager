@@ -1,9 +1,9 @@
 import { vi } from 'vitest'
-import type { EndpointOptions, InternalEnpointOptions, PluginOptions, RequestsContainer } from '../../src/lib'
+import type { EndpointOptions, InternalEnpointOptions, PluginOptions, RequestsContainer } from '../../src/lib/types'
 
-import axios from 'axios'
+// import axios from 'axios'
 
-// const mockAxios = vi.mocked(axios)
+// export const mockedAxios = vi.mocked(axios)
 
 export const mockEndpoint: EndpointOptions = {
   name: 'testendpoint',
@@ -13,8 +13,7 @@ export const mockEndpoint: EndpointOptions = {
 export const mockInternalEndpoint: InternalEnpointOptions = {
   internalName: '$testEndpointAxios',
   endpointDomain: 'http://example.com',
-  // instance: mockAxios,
-  instance: vi.mocked(axios),
+  instance: vi.fn(),
   ...mockEndpoint
 }
 

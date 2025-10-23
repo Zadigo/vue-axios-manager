@@ -1,6 +1,6 @@
-import { describe, expect, beforeEach, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createAxiosInstance } from '../src/'
-import { PluginOptions } from '../src/lib'
+import { PluginOptions } from '../src/lib/types'
 
 describe('test createAxiosInstance', () => {
   const options: PluginOptions = {
@@ -11,8 +11,6 @@ describe('test createAxiosInstance', () => {
       }
     ]
   }
-
-  beforeEach(() => {})
 
   it('should return a valid options dictionnary', () => {
     const result = createAxiosInstance(options, options.endpoints[0])

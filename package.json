@@ -44,7 +44,7 @@
     "dev": "vite playground",
     "build": "rollup -c rollup.config.mjs",
     "test": "vitest run --coverage",
-    "test:watch": "vitest watch --coverage",
+    "test:wa": "vitest watch --coverage",
     "preview": "vite preview",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",

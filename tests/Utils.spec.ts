@@ -2,7 +2,15 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { createAxiosInstance, createInternalEndpointName, inProduction } from '../src'
 import type { PluginOptions } from '../src/lib/types'
 
-// import {  } from 'node:inspector'
+vi.mock('axios', () => {
+  return {
+    default: {
+      create: vi.fn(() => {
+        return {}
+      })
+    }
+  }
+})
 
 const pluginOptions: PluginOptions = {
   endpoints: [
@@ -56,10 +64,9 @@ describe('Create Axios Instance', () => {
     initialEndpoint.disableAuth = true
     const endpoint = createAxiosInstance(pluginOptions, initialEndpoint)
 
-    console.log(endpoint)
-
     expect(endpoint.disableAccess).toBeTruthy()
     expect(endpoint.disableRefresh).toBeTruthy()
+    expect(endpoint.disableAuth).toBeTruthy()
   })
 })
 

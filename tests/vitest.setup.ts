@@ -1,24 +1,9 @@
 import { vi } from 'vitest'
 
-vi.mock('axios', async () => {
-  const actual = await vi.importActual<typeof import('axios')>('axios')
-
-  return {
-    ...actual,
-    create: vi.fn()
-  }
-})
-
 vi.mock('@vueuse/core', () => ({
   useDebounceFn: vi.fn((fn, _delay) => fn),
-  watchDebounced: vi.fn()
-}))
-
-vi.mock('@vueuse/integrations/useCookies.mjs', () => ({
-  useCookies: vi.fn(() => ({
-    get: vi.fn(),
-    set: vi.fn()
-  }))
+  watchDebounced: vi.fn(),
+  isDefined: vi.fn(val => val !== undefined && val !== null)
 }))
 
 vi.mock('vue', async () => {

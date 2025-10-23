@@ -21,7 +21,6 @@ describe('Vue Axios Manager', () => {
     expect(instance.provideAttr[endpointName]).toBeTypeOf('object')
     expect(instance.pluginOptions).toBeDefined()
     expect(instance.container[endpointName]).toBeDefined()
-    console.log(instance.container)
   })
 
   it('should be able to register request', () => {

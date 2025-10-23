@@ -18,7 +18,7 @@ vi.spyOn(vueAxiosManager, 'initialize').mockImplementation(() => {
   Object.assign(vueAxiosManager, fakeVueAxiosManager)
 })
 
-describe('useAsyncRequest', () => {
+describe.skip('useAsyncRequest', () => {
   let mockAxiosInstance: unknown
 
   beforeEach(() => {

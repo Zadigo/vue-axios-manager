@@ -127,6 +127,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   const isAppContext = computed(() => isDefined(app))
 
   const endpoint = vueAxiosManager.provideAttr[name]
+  // console.log('vueAxiosManager.endpoints', vueAxiosManager.endpoints)
   // console.log('vueAxiosManager', vueAxiosManager.provideAttr[name]?.internalName)
 
   if (typeof endpoint === 'undefined') {
@@ -136,6 +137,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   // Initial client from the endpoint
   let client = endpoint.instance
 
+  // console.log('useRequest: client', typeof client)
   // console.log('vueAxiosManager', vueAxiosManager)
 
   // baseUrl allows the user to override
