@@ -1,3 +1,10 @@
+## Version 2.00.0 (2025-10-25)
+
+### Features
+
+- Clean documentation site
+- Update package dependencies to latest versions
+
 ## Version 2.00.0-beta.2 (2025-10-23)
 
 ### Features
