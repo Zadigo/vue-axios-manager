@@ -1,3 +1,10 @@
+## Version 2.01.0 (2025-10-25)
+
+### Features
+
+- Add `publish:dry` script to test package publishing without actually publishing
+- Only implement files and folders that should be included in the final package
+
 ## Version 2.00.0 (2025-10-25)
 
 ### Features
