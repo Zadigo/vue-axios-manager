@@ -1,7 +1,13 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-sm-12 col-md-8">
+      <div class="col-md-3">
+        <with-input />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-5 offset-md-3 mb-2">
         <user-composable />
       </div>
     </div>
@@ -89,12 +95,13 @@
 </template>
 
 <script setup lang="ts">
-import UserComposable from './components/UserComposable.vue'
-import { defineAsyncComponent, ref } from 'vue'
-import { useRequest } from '../src/lib/composables'
-import { useComments } from './stores'
-import { storeToRefs } from 'pinia'
 import { useCounter, useUrlSearchParams } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
+import { defineAsyncComponent } from 'vue'
+import { useRequest } from '../src/lib/composables'
+import UserComposable from './components/UserComposable.vue'
+import WithInput from './components/WithInput.vue'
+import { useComments } from './stores'
 
 const AsyncWithSuspense = defineAsyncComponent({
   loader: () => import('./components/WithSuspense.vue')
