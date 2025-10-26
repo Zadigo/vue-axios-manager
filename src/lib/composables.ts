@@ -362,7 +362,7 @@ export async function useAxiosLogin<T = LoginApiResponse>(credentials: Credentia
 /**
  * Composable to retrieve the access token from the cookies
  * and maintain a history of the last three access tokens
- * @private v2.1.0
+ * @private v2.x.0
  */
 export const useAccessToken = createGlobalState(() => {
   const getAccessToken = reactify(getFromCookie)
@@ -386,7 +386,7 @@ export const useAccessToken = createGlobalState(() => {
 /**
  * Composable to retrieve the user id from the JWT access token
  * and makes it available globally
- * @private v2.1.0
+ * @private v2.x.0
  */
 export const useUser = createGlobalState(<T>(column?: keyof T) => {
   const { access } = useAccessToken()

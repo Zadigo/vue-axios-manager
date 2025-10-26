@@ -14,7 +14,7 @@ export const useComments = defineStore('comments', () => {
   const comments = ref<Comment[]>()
 
   async function handleComments() {
-    const { execute, responseData } = useRequest<Comment[]>('quart', '/v1/test')
+    const { execute, responseData, status } = useRequest<Comment[]>('quart', '/v1/test')
     await execute()
 
     console.log('useComments.responseData.value', responseData.value)
@@ -27,6 +27,7 @@ export const useComments = defineStore('comments', () => {
 
   return {
     handleComments,
+    status,
     comments
   }
 })
