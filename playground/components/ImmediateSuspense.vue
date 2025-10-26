@@ -1,21 +1,12 @@
 <template>
-  <div class="card-body">
-    <h5>Immediate</h5>
-    <p class="card-text">
-      {{ responseData }}
-    </p>
-  </div>
+  <request-card :data="responseData" :status="status" title="Suspense Immediate" />
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { useAsyncRequest } from '../../src/lib/composables'
+import RequestCard from './RequestCard.vue'
 
-const { execute, responseData } = await useAsyncRequest('comments', '/comments', {
+const { execute, responseData, status } = await useAsyncRequest('comments', '/comments', {
   immediate: true
-})
-
-onMounted(async () => {
-  await execute()
 })
 </script>
