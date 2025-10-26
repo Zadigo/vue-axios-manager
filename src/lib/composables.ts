@@ -1,13 +1,12 @@
 import { createGlobalState, isDefined, reactify, useDebouncedRefHistory, useDebounceFn, watchDebounced } from '@vueuse/core'
 import { useJwt } from '@vueuse/integrations'
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios, { AxiosError } from 'axios'
 import cookie from 'universal-cookie'
-import { computed, getCurrentInstance, ref } from 'vue'
-import { vueAxiosManager } from './manager'
-
-import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { ComputedRef, Ref } from 'vue'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, ExtendedJwt, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, Undefineable } from './types'
+import { computed, getCurrentInstance, isRef, ref } from 'vue'
+import { vueAxiosManager } from './manager'
+import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, ExtendedJwt, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, QueryType, RefreshApiResponse, StringTypes, Undefineable } from './types'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -197,8 +196,27 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
       //   }
       // })
 
+      // If the user passes refs in the query params,
+      // we need to unwrap them before sending the request.
+      // The tracking of the ref is still maintained via
+      // and updated in the request's query
+      const cleanSearchParams = (value: Undefineable<QueryType>) => {
+        const cleanedParams: Record<string, StringTypes> = {}
+
+        if (isDefined(value)) {
+          Object.entries(value).forEach(([key, val]) => {
+            if (isRef(val)) {
+              cleanedParams[key] = val.value
+            } else {
+              cleanedParams[key] = val
+            }
+          })
+          return cleanedParams
+        }
+      }
+
       if (method === 'get') {
-        response = await client.get<T>(path, { params: params?.query })
+        response = await client.get<T>(path, { params: cleanSearchParams(params?.query) })
       } else {
         response = await client[method]<T>(path, params?.body)
       }
@@ -234,7 +252,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
       status.value = 'error'
 
       if (e && e instanceof AxiosError) {
-        console.log('useRequest: Bubbled up error', e)
+        console.log('useRequest: Bubbled up error', e.response)
 
         // try {
         //   vueAxiosManager._registerRequest(e.config?.method, endpoint, {

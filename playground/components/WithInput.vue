@@ -6,6 +6,7 @@
       </div>
       
       <input type="text" v-model="search" class="form-control mb-3" placeholder="Type to search..." />
+      <button class="btn btn-primary" @click="execute">Search</button>
     </div>
   </div>
 </template>
@@ -16,14 +17,8 @@ import { ref } from 'vue'
 import { useRequest } from '../../src/lib/composables'
 
 const search = ref('')
-const { responseData, execute } = useRequest('quart', '/todos/1', {
-  query: { q: search.value },
-  watch: [search]
+const { responseData, execute } = useRequest('comments', '/todos/1', {
+  query: { q: search, r: '', n: 1 },
+    
 })
-
-// watchDebounced(search, () => {
-//   execute()
-// }, {
-//   debounce: 1000,
-// })
 </script>
