@@ -58,7 +58,7 @@
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
     "publish": "pnpm run lint && git push && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish",
-    "publish:dry": "npm pack --dry-run",
+    "publish:dry": "pnpm run lint && npm pack --dry-run",
     "publish:alpha": "pnpm run lint && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish --tag alpha",
     "publish:beta": "pnpm run lint && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish --tag beta",
     "publish:rc": "pnpm run lint && git push --follow-tags && rollup -c && pnpm run docs:build && pnpm publish --tag rc",

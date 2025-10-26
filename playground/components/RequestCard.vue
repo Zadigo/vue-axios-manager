@@ -17,7 +17,7 @@
 <script setup lang="ts">
 defineProps<{
   title?: string
-  data: object
+  data: object | object[] | undefined
   status?: string
 }>()
 </script>
