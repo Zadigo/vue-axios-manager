@@ -1,6 +1,7 @@
 <template>
   <request-card :data="responseData" :status="status">
-    <input type="text" v-model="search" class="form-control mb-3" placeholder="Type to search..." />
+    <input type="text" v-model="search" class="form-control mb-3" placeholder="Dynamic search..." />
+    <input type="text" v-model="search" class="form-control mb-3" placeholder="Button search..." />
     <button class="btn btn-primary" @click="execute">Search</button>
   </request-card>
 </template>

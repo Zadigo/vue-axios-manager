@@ -1,7 +1,7 @@
 import axios from 'axios'
-import type { EndpointOptions } from './types'
-
-import type { InternalEnpointOptions, PluginOptions } from './types'
+import type { EndpointOptions, InternalEnpointOptions, PluginOptions, QueryType, StringTypes, Undefineable } from './types'
+import { isDefined } from '@vueuse/core'
+import { isRef } from 'vue'
 
 /**
  * Checks whether the application in prodcution
@@ -96,4 +96,24 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
   }
 
   return finalOptions
+}
+
+/**
+ * A helper function that cleans the search params object
+ * by unwrapping any refs
+ * @param value The object for which the values should be checked
+ */
+export function cleanSearchParams(value: Undefineable<QueryType>) {
+  const cleanedParams: Record<string, StringTypes> = {}
+
+  if (isDefined(value)) {
+    Object.entries(value).forEach(([key, val]) => {
+      if (isRef(val)) {
+        cleanedParams[key] = val.value
+      } else {
+        cleanedParams[key] = val
+      }
+    })
+    return cleanedParams
+  }
 }

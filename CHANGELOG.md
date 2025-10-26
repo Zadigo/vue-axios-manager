@@ -1,3 +1,9 @@
+## Version 2.1.1 (2025-10-26)
+
+### Features
+
+- `cleanSearchParams` function does not get correctly bundled in browser
+
 ## Version 2.1.0 (2025-10-26)
 
 ### Features
