@@ -1,4 +1,10 @@
-## Version 2.01.0 (2025-10-25)
+## Version 2.1.0 (2025-10-26)
+
+### Features
+
+- Track refs in the `query` parameter of composables automatically so that changes are reactive without manual intervention in the query parameters of the url
+
+## Version 2.00.1 (2025-10-25)
 
 ### Features
 

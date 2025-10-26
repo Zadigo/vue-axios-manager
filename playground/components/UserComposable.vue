@@ -10,6 +10,10 @@
 <script setup lang="ts">
 import { useAccessToken, useUser } from '../../src/lib/composables'
 
+/**
+ * A simple component to test useUser and useAccessToken composables
+ */
+
 const { access } = useAccessToken()
 const { id } = useUser<{ user_id: string }>('user_id')
 </script>

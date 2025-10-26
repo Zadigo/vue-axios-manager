@@ -5,6 +5,10 @@ export type _Partialize<T> = {
   [K in keyof Partial<T>]: T[K]
 }
 
+export type StringTypes = string | number | boolean
+
+export type MultiTypeRecord<T> = Record<string, StringTypes | T>
+
 export type UnknownRecord<K extends string> = Record<K, unknown>
 
 export type Undefineable<T> = T | undefined
@@ -15,6 +19,8 @@ export type Empty<T> = Undefineable<T> | Nullable<T>
 
 export type Arrayable<T> = T[]
 
+export type Refeable<T> = Ref<T>
+
 export type ArrayableRef<T> = Ref<Arrayable<T>>
 
 type InternalAxiosRequestConfig = Omit<AxiosRequestConfig, 'baseURL' | 'data' | 'params' | 'method' | 'url'>
@@ -22,6 +28,8 @@ type InternalAxiosRequestConfig = Omit<AxiosRequestConfig, 'baseURL' | 'data' | 
 export interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
 }
+
+export type QueryType = MultiTypeRecord<Refeable<StringTypes>>
 
 interface SharedOptions {
   /**
@@ -148,8 +156,8 @@ export interface ComposableOptions<T> {
    * the both the initial domain or dev values
    * provided for the endpoint
    * ```js
-   * const { execute } = useRequest('/path', {
-   *  baseUrl: 'http://example.com'
+   * const { execute } = useRequest('endpoint', '/path', {
+   *   baseUrl: 'http://example.com'
    * })
    * await execute()
    * ```
@@ -167,7 +175,7 @@ export interface ComposableOptions<T> {
   /**
    * Request query
    */
-  query?: UnknownRecord<string>
+  query?: QueryType
   /**
    * Hook to execute before the request starts
    */
@@ -194,7 +202,8 @@ export interface AsyncComposableOptions<T> extends ComposableOptions<T> {
    */
   immediate?: boolean
   /**
-   * Debounce the execution of the request
+   * Debounce the execution of the request by the provided
+   * milliseconds
    * @default 0
    */
   debounce?: number

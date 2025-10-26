@@ -1,10 +1,16 @@
-## Version 2.1.0 (2025-10-30)
+## Version 2.x.0 (2025-x-x)
 
 ### Features
 
 - [ ] Allow the user to directly refresh the access token in a Vue template manually
 - [ ] By importing `useJwt` from `@vueuse/integrations` we are forced to install all of `change-case drauu fuse.js idb-keyval sortablejs async-validator focus-trap jwt-decode nprogress qrcode` which is way too much. We only need `jwt-decode`
 - [ ] Create the presets for auto-importing the global composables in Vite projects with `unplugin-auto-import`
+
+## Version 2.1.0 (2025-10-30)
+
+### Features
+
+- [x] Track refs in the `query` parameter of composables automatically so that changes are reactive without manual intervention in the query parameters of the url
 
 ## Version 2.0.1 (2025-10-25)
 
@@ -18,7 +24,6 @@
 
 - [x] Add a `useUser` global composable to get the current authenticated user's ID
 - [x] Add a `useAccessToken` global composable to return the access token in any Vue template
-- [ ] Allow the user to directly refresh the access token in a Vue template manually
 
 ## Version 2.00.0-beta.1 (2025-10-15)
 
