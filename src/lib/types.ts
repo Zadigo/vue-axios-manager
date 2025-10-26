@@ -202,7 +202,8 @@ export interface AsyncComposableOptions<T> extends ComposableOptions<T> {
    */
   immediate?: boolean
   /**
-   * Debounce the execution of the request
+   * Debounce the execution of the request by the provided
+   * milliseconds
    * @default 0
    */
   debounce?: number

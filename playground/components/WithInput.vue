@@ -12,13 +12,18 @@
 </template>
 
 <script setup lang="ts">
-import { watchDebounced } from '@vueuse/core'
 import { ref } from 'vue'
 import { useRequest } from '../../src/lib/composables'
 
+/**
+ * A component that demonstrates the use of `useRequest` composable
+ * with an input field to perform searches
+ */
+
 const search = ref('')
+
 const { responseData, execute } = useRequest('comments', '/todos/1', {
   query: { q: search, r: '', n: 1 },
-    
+
 })
 </script>
