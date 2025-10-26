@@ -112,6 +112,11 @@ export interface EndpointOptions extends SharedOptions {
    * @default false
    */
   disableRefresh?: boolean
+  /**
+   * Cache the requests made to this endpoint
+   * @default false
+   */
+  cache?: boolean
 }
 
 export interface PluginOptions extends SharedOptions {
@@ -191,8 +196,9 @@ export interface ComposableOptions<T> {
   watch?: (Ref<string> | Ref<number> | Ref<UnknownRecord<string>>)[]
   /**
    * Cache the results of the requested API
+   * @default false
    */
-  // cache: UseMemoizeOptions<>
+  cache?: boolean
 }
 
 export interface AsyncComposableOptions<T> extends ComposableOptions<T> {

@@ -1,8 +1,7 @@
-import { reactive, toRefs } from 'vue'
-import { inProduction, createAxiosInstance } from './utils'
-
 import type { App } from 'vue'
+import { reactive, toRefs } from 'vue'
 import type { _DevtoolsTimelineObject, _VueAxiosManager, EndpointOptions, InternalEndpointOptionKeys, InternalEnpointOptions, PluginOptions, RequestsContainer } from './types'
+import { createAxiosInstance, inProduction } from './utils'
 
 /**
  * Manager that centralizes the different options

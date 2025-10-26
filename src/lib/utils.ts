@@ -1,7 +1,5 @@
 import axios from 'axios'
-import type { EndpointOptions } from './types'
-
-import type { InternalEnpointOptions, PluginOptions } from './types'
+import type { EndpointOptions, InternalEnpointOptions, PluginOptions } from './types'
 
 /**
  * Checks whether the application in prodcution
@@ -70,16 +68,17 @@ export function createAxiosInstance(pluginOptions: PluginOptions, endpoint: Endp
   // console.log('createAxiosInstance.baseDomain', baseDomain)
 
   const axiosOptions = pluginOptions.axios || endpoint.axios || {}
-  const instance = axios.create({
-    baseURL: baseDomain,
-    ...axiosOptions
-  })
+  const instance = axios.create({ baseURL: baseDomain, ...axiosOptions })
 
   const finalOptions = {
     ...endpoint,
     internalName: createInternalEndpointName(endpoint.name),
     endpointDomain: baseDomain,
     instance
+  }
+
+  if (typeof finalOptions.cache === 'undefined') {
+    finalOptions.cache = false
   }
 
   if (typeof finalOptions.disableAccess === 'undefined') {

@@ -1,4 +1,4 @@
-import { createGlobalState, isDefined, reactify, useDebouncedRefHistory, useDebounceFn, watchDebounced } from '@vueuse/core'
+import { createGlobalState, isDefined, reactify, useDebouncedRefHistory, useDebounceFn, useMemoize, watchDebounced } from '@vueuse/core'
 import { useJwt } from '@vueuse/integrations'
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios, { AxiosError } from 'axios'
@@ -187,15 +187,6 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
       status.value = 'pending'
 
-      // TODO: Implement memoize for caching
-      // const { load } = useMemoize(async (routePath: string) => {
-      //   if (method == 'get') {
-      //     return await client.get<T>(routePath, { params: params?.query })
-      //   } else {
-      //     return await client[method]<T>(routePath, params?.body)
-      //   }
-      // })
-
       // If the user passes refs in the query params,
       // we need to unwrap them before sending the request.
       // The tracking of the ref is still maintained via
@@ -215,10 +206,24 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
         }
       }
 
-      if (method === 'get') {
-        response = await client.get<T>(path, { params: cleanSearchParams(params?.query) })
+      if (endpoint.cache || params?.cache) {
+        const { load, cache } = useMemoize(async (routePath: string) => {
+          if (method === 'get') {
+            return await client.get<T>(routePath, { params: cleanSearchParams(params?.query) })
+          } else {
+            return await client[method]<T>(routePath, params?.body)
+          }
+        })
+
+        console.log(cache)
+
+        response = await load(path)
       } else {
-        response = await client[method]<T>(path, params?.body)
+        if (method === 'get') {
+          response = await client.get<T>(path, { params: cleanSearchParams(params?.query) })
+        } else {
+          response = await client[method]<T>(path, params?.body)
+        }
       }
 
       status.value = 'success'

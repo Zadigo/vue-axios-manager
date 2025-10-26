@@ -44,6 +44,10 @@
           </template>
         </Suspense>
       </div>
+
+      <div class="col-md-3">
+        <with-cache />
+      </div>
     </div>
   </div>
 </template>
@@ -54,6 +58,7 @@ import AbnormalUsage from './components/AbnormalUsage.vue'
 import FromPinia from './components/FromPinia.vue'
 import NormalUsage from './components/NormalUsage.vue'
 import UserComposable from './components/UserComposable.vue'
+import WithCache from './components/WithCache.vue'
 import WithInput from './components/WithInput.vue'
 import WithWatch from './components/WithWatch.vue'
 
