@@ -1,3 +1,9 @@
+## Version 2.1.2 (2025-10-26)
+
+### Bug Fixes
+
+- Fix issue where nested refs in the `query` parameter were not being resolved correctly, leading to wrong URL query strings
+
 ## Version 2.1.1 (2025-10-26)
 
 ### Features

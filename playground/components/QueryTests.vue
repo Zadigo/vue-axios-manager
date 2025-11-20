@@ -15,5 +15,5 @@ import type { Todo } from '../types'
 
 const search = ref('')
 
-const { responseData, execute, status } = useRequest<Todo>('comments', '/todos/1', { query: { q: search } })
+const { responseData, execute, status } = useRequest<Todo>('comments', '/todos/1', { query: { q: search, p: 1, n: 'value' } })
 </script>
