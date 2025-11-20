@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRequest } from '../src/lib/composables'
+import { useRequest } from '../../src/lib/composables'
 
 /**
  * Expect a 401 error in order to test interceptors

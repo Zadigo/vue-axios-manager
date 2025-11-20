@@ -173,9 +173,6 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   /**
    * Function used to send a request
-   * @param method Method to use for the given request
-   * @param data Post data to pass to the body of the request
-   * @param options Options to send with the request
    */
   async function execute() {
     if (params?.beforeStart) {

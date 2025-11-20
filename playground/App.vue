@@ -26,6 +26,10 @@
       </div>
 
       <div class="col-md-3">
+        <query-tests />
+      </div>
+
+      <div class="col-md-3">
         <Suspense>
           <AsyncWithSuspense class="my-3" />
 
@@ -56,6 +60,7 @@ import NormalUsage from './components/NormalUsage.vue'
 import UserComposable from './components/UserComposable.vue'
 import WithInput from './components/WithInput.vue'
 import WithWatch from './components/WithWatch.vue'
+import QueryTests from './components/QueryTests.vue'
 
 const AsyncWithSuspense = defineAsyncComponent({
   loader: () => import('./components/WithSuspense.vue')

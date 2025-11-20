@@ -1,7 +1,7 @@
-import axios from 'axios'
-import type { EndpointOptions, InternalEnpointOptions, PluginOptions, QueryType, StringTypes, Undefineable } from './types'
 import { isDefined } from '@vueuse/core'
-import { isRef } from 'vue'
+import axios from 'axios'
+import { toValue } from 'vue'
+import type { EndpointOptions, InternalEnpointOptions, PluginOptions, QueryType, StringTypes, Undefineable } from './types'
 
 /**
  * Checks whether the application in prodcution
@@ -108,11 +108,7 @@ export function cleanSearchParams(value: Undefineable<QueryType>) {
 
   if (isDefined(value)) {
     Object.entries(value).forEach(([key, val]) => {
-      if (isRef(val)) {
-        cleanedParams[key] = val.value
-      } else {
-        cleanedParams[key] = val
-      }
+      cleanedParams[key] = toValue(val) as StringTypes
     })
     return cleanedParams
   }
