@@ -1,0 +1,42 @@
+name: VueAxiosManager CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        nodeversion: [25.x]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Node.js ${{ matrix['nodeversion'] }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix['nodeversion'] }}
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install dependencies
+      run: pnpm install
+    
+    - name: Lint code
+      run: pnpm run lint
+      continue-on-error: false
+      
+    - name: Build project
+      run: pnpm run build
+      continue-on-error: false
+      if: hashFiles('package.json') != '' || hashFiles('pnpm-lock.yaml') != '' || hashFiles('tsconfig.json') != '' || hashFiles('src/**') != ''
+  
