@@ -32,12 +32,9 @@ jobs:
       with:
         node-version: ${{ matrix['nodeversion'] }}
 
-    - name: Install pnpm
-      run: npm install -g pnpm
-
     - name: Install dependencies
-      run: npm install
+      run: pnpm install
     
     - name: Lint code
-      run: npm lint
+      run: pnpm lint
       continue-on-error: false
