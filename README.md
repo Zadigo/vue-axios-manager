@@ -50,7 +50,7 @@ app.use(createVueAxiosManager({
       port: '5000',
       domain: 'http://example.com',
       accessEndpoint: '/v1/token',
-      refreshEnpoint: '/v1/refresh-token',
+      refreshEndpoint: '/v1/refresh-token',
       https: false,
       accessKey: 'some-access-key-name',
       refreshKey: 'some-refresh-key-name',
@@ -103,7 +103,7 @@ Boolean indicating whether to use HTTPS in development
 
 API route used to request an access token
 
-`refreshEnpoint`
+`refreshEndpoint`
 
 API route used to refresh an access token
 
@@ -164,7 +164,7 @@ Domain to use in a producton context
 
 Path used to generated an access token
 
-`refreshEnpoint`
+`refreshEndpoint`
 
 Path used to generated an refresh token
 

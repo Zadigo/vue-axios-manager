@@ -100,7 +100,7 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
             // console.log('responseErrorInterceptor: Refresh', refresh)
 
             const refreshClient = axios.create({ baseURL: domain })
-            const refreshTokenEndpoint = endpoint.refreshEnpoint || '/v1/token/refresh/'
+            const refreshTokenEndpoint = endpoint.refreshEndpoint || '/v1/token/refresh/'
             const response = await refreshClient.post<RefreshApiResponse>(refreshTokenEndpoint, { refresh })
 
             // set(accessTokenKey, response.data.access, { secure: true, sameSite: 'strict' })
