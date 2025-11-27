@@ -15,10 +15,12 @@ jobs:
         nodeversion: [18.x, 20.x]
     
     steps:
-    # - name: Checkout repository
-    #   uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-    - name: Check location
+    - name: Debug - Check current directory
       run: |
         pwd
         ls -la
