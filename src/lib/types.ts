@@ -86,7 +86,18 @@ export interface EndpointOptions extends SharedOptions {
    * Path used to refresh an access token
    * @default "/v1/refresh/token"
    */
-  refreshEnpoint?: string
+  refreshEndpoint?: string
+  /**
+   * Path used to verify an access token
+   * @default "/v1/verify/token"
+   */
+  verifyEndpoint?: string
+  /**
+   * Whether to verify the access token before
+   * making requests
+   * @default true
+   */
+  verifyToken?: boolean
   /**
    * Whether to use https for the development endpoint
    * @default false
