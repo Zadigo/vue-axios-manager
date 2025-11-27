@@ -28,7 +28,8 @@ jobs:
       run: npm install -g pnpm
 
     - name: Install dependencies
-      run: pnpm install
+      run: npm install
     
     - name: Lint code
-      run: pnpm lint
+      run: npm lint
+      continue-on-error: false
