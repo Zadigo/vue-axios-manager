@@ -1,4 +1,4 @@
-import { createGlobalState, isDefined, reactify, useDebouncedRefHistory, useDebounceFn, watchDebounced } from '@vueuse/core'
+import { createGlobalState, isDefined, reactify, useDebouncedRefHistory, useDebounceFn, useIntervalFn, watchDebounced } from '@vueuse/core'
 import { useJwt } from '@vueuse/integrations'
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import axios, { AxiosError } from 'axios'
@@ -100,7 +100,7 @@ function responseErrorInterceptor(domain: string | undefined, endpoint: Internal
             // console.log('responseErrorInterceptor: Refresh', refresh)
 
             const refreshClient = axios.create({ baseURL: domain })
-            const refreshTokenEndpoint = endpoint.refreshEnpoint || '/v1/token/refresh/'
+            const refreshTokenEndpoint = endpoint.refreshEndpoint || '/v1/token/refresh/'
             const response = await refreshClient.post<RefreshApiResponse>(refreshTokenEndpoint, { refresh })
 
             // set(accessTokenKey, response.data.access, { secure: true, sameSite: 'strict' })
@@ -342,12 +342,33 @@ export async function useAxiosLogin<T = LoginApiResponse>(credentials: Credentia
 /**
  * Composable to retrieve the access token from the cookies
  * and maintain a history of the last three access tokens
- * @private v2.x.0
  */
-export const useAccessToken = createGlobalState(() => {
+export const useAuthenticationTokens = createGlobalState(() => {
   const getAccessToken = reactify(getFromCookie)
+
   const access = getAccessToken('access') as ComputedRef<Undefineable<string>>
+  const refresh = getAccessToken('refresh') as ComputedRef<Undefineable<string>>
+
   const { history } = useDebouncedRefHistory(access, { capacity: 3, deep: false })
+
+  // vueAxiosManager.pluginOptions?.endpoints.forEach((endpoint) => {
+  //   if (endpoint.verifyToken) {
+  //     useIntervalFn(async () => {
+  //       const { responseData, execute } = useRequest<Record<string, unknown>>(endpoint.name, endpoint.verifyEndpoint || '/v1/token/verify/', {
+  //         method: 'post',
+  //         body: {
+  //           token: access.value
+  //         }
+  //       })
+
+  //       await execute()
+
+  //       if (responseData.value) {
+  //         console.log(responseData)
+  //       }
+  //     }, 10000)
+  //   }
+  // })
 
   return {
     /**
@@ -355,6 +376,11 @@ export const useAccessToken = createGlobalState(() => {
      * @default undefined
      */
     access,
+    /**
+     * The current refresh token
+     * @default undefined
+     */
+    refresh,
     /**
      * History of the last three access tokens
      * @default []
@@ -366,10 +392,9 @@ export const useAccessToken = createGlobalState(() => {
 /**
  * Composable to retrieve the user id from the JWT access token
  * and makes it available globally
- * @private v2.x.0
  */
 export const useUser = createGlobalState(<T>(column?: keyof T) => {
-  const { access } = useAccessToken()
+  const { access } = useAuthenticationTokens()
   const { payload } = useJwt<ExtendedJwt<T>>(access.value as string)
 
   const id = computed(() => {
