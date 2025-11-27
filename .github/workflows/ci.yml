@@ -18,6 +18,9 @@ jobs:
     # - name: Checkout repository
     #   uses: actions/checkout@v4
 
+    - name: Check location
+      run: ls -la
+
     - name: Set up Node.js ${{ matrix['nodeversion'] }}
       uses: actions/setup-node@v4
       with:
