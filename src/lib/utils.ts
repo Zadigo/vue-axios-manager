@@ -4,7 +4,7 @@ import { toValue } from 'vue'
 import type { EndpointOptions, InternalEnpointOptions, PluginOptions, QueryType, StringTypes, Undefineable } from './types'
 
 /**
- * Checks whether the application in prodcution
+ * Checks whether the application is in prodcution
  */
 export function inProduction(): boolean {
   return process.env.NODE_ENV === 'production'
