@@ -1,3 +1,10 @@
+## Version 2.1.3 (2025-10-26)
+
+## Bug Fixes
+
+- Allow `useAxiosManager` POST requests to accept query parameters notably when using GraphQL endpoints
+
+
 ## Version 2.1.2 (2025-10-26)
 
 ### Bug Fixes

@@ -48,6 +48,10 @@
           </template>
         </Suspense>
       </div>
+
+      <div class="col-md-3">
+        <graph-ql />
+      </div>
     </div>
   </div>
 </template>
@@ -61,6 +65,7 @@ import UserComposable from './components/UserComposable.vue'
 import WithInput from './components/WithInput.vue'
 import WithWatch from './components/WithWatch.vue'
 import QueryTests from './components/QueryTests.vue'
+import GraphQl from './components/GraphQl.vue'
 
 const AsyncWithSuspense = defineAsyncComponent({
   loader: () => import('./components/WithSuspense.vue')

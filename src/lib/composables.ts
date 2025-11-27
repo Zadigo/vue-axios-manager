@@ -6,8 +6,8 @@ import cookie from 'universal-cookie'
 import type { ComputedRef, Ref } from 'vue'
 import { computed, getCurrentInstance, ref } from 'vue'
 import { vueAxiosManager } from './manager'
-import type { AsyncComposableOptions, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, ExtendedJwt, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, Undefineable } from './types'
-import { cleanSearchParams } from './utils'
+import type { AsyncComposableOptions, AxiosTransformedData, ComposableOptions, Credentials, ExtendedInternalAxiosRequestConfig, ExtendedJwt, InternalEnpointOptions, LoginApiResponse, LoginComposableOptions, Methods, PluginOptions, RefreshApiResponse, Undefineable } from './types'
+import { cleanSearchParams, inProduction } from './utils'
 
 export type RequestStatus = 'idle' | 'pending' | 'success' | 'error'
 
@@ -127,12 +127,13 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
   const app = getCurrentInstance()
   const isAppContext = computed(() => isDefined(app))
 
+  const endpointNames = vueAxiosManager.endpoints.map(e => e.name)
   const endpoint = vueAxiosManager.provideAttr[name]
   // console.log('vueAxiosManager.endpoints', vueAxiosManager.endpoints)
   // console.log('vueAxiosManager', vueAxiosManager.provideAttr[name]?.internalName)
 
   if (typeof endpoint === 'undefined') {
-    throw new Error(`Endpoint with with name ${name} does not exist`)
+    throw new Error(`Endpoint with with name "${name}" does not exist. Valid endpoint names are: ${endpointNames.join(', ')}`)
   }
 
   // Initial client from the endpoint
@@ -168,7 +169,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
   // console.log('useRequest: RequestStore', store)
 
-  const responseData = ref<T>()
+  const responseData = ref<T | AxiosTransformedData<T>>()
   const status = ref<RequestStatus>('idle')
 
   /**
@@ -181,7 +182,7 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
     try {
       const method: Methods = params?.method || 'get'
-      let response: AxiosResponse<T>
+      let response: Undefineable<AxiosResponse<T>>
 
       status.value = 'pending'
 
@@ -203,21 +204,19 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
 
       status.value = 'success'
 
-      if (params?.completed) {
-        params.completed(response)
-      }
-
-      try {
-        vueAxiosManager._registerRequest(method, endpoint, {
-          name,
-          method,
-          statusText: 'OK',
-          data: (response.data ?? response.data) || {},
-          headers: JSON.stringify(response.headers),
-          path: response.config?.url
-        })
-      } catch (e) {
-        console.error(e)
+      if (inProduction() === false) {
+        try {
+          vueAxiosManager._registerRequest(method, endpoint, {
+            name,
+            method,
+            statusText: 'OK',
+            data: response?.data || {},
+            headers: JSON.stringify(response?.headers),
+            path: response?.config?.url
+          })
+        } catch (e) {
+          console.error(e)
+        }
       }
 
       // console.log('execute.response', response)
@@ -227,7 +226,11 @@ export function useRequest<T>(name: string, path: string, params?: ComposableOpt
       // console.log('useRequest: responseData.value', responseData.value)
       // console.log('useRequest: response.data', response.data)
 
-      responseData.value = response.data
+      if (params?.completed) {
+        responseData.value = params.completed(response.data, response)
+      } else {
+        responseData.value = response?.data
+      }
     } catch (e) {
       status.value = 'error'
 
@@ -333,7 +336,7 @@ export async function useAsyncRequest<T>(name: string, path: string, params?: As
  * @param path The path to log the client in
  * @param params The parameters for the request
  */
-export async function useAxiosLogin<T = LoginApiResponse>(credentials: Credentials, clientName: string, path: string, params?: LoginComposableOptions<T>): Promise<Ref<T | undefined>> {
+export async function useAxiosLogin<T = LoginApiResponse>(credentials: Credentials, clientName: string, path: string, params?: LoginComposableOptions<T>): Promise<Ref<T | AxiosTransformedData<T> | undefined>> {
   const { execute, responseData } = useRequest<T>(clientName, path, { method: 'post', body: credentials, ...params })
   await execute()
   return responseData

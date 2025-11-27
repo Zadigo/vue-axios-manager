@@ -150,6 +150,8 @@ export interface InternalEnpointOptions extends EndpointOptions {
 
 export type InternalEndpointOptionKeys = keyof InternalEnpointOptions
 
+export type AxiosTransformedData<T> = T extends AxiosResponse<infer N> ? N : undefined
+
 export interface ComposableOptions<T> {
   /**
    * Provide a domain which will supersede
@@ -184,7 +186,7 @@ export interface ComposableOptions<T> {
    * Hook used after the request has finished
    * @param response The response for the request
    */
-  completed?: (response: AxiosResponse<T>) => T
+  completed?: (data: T, response: AxiosResponse<T>) => AxiosTransformedData<T> | T
   /**
    * Watch and trigger requests based on a parameter
    */
