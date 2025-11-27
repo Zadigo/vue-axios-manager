@@ -19,7 +19,11 @@ jobs:
     #   uses: actions/checkout@v4
 
     - name: Check location
-      run: ls -la
+      run: |
+        pwd
+        ls -la
+        echo "Repository contents:"
+        find . -maxdepth 2 -type f
 
     - name: Set up Node.js ${{ matrix['nodeversion'] }}
       uses: actions/setup-node@v4
