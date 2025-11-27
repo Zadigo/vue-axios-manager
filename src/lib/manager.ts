@@ -32,6 +32,8 @@ export class VueAxiosManager implements _VueAxiosManager {
   public initialize(app: App, pluginOptions: PluginOptions) {
     this.pluginOptions = pluginOptions
 
+    // console.log('VueAxiosManager: Initializing with options:', this.pluginOptions)
+
     this.endpoints = pluginOptions.endpoints.map((endpointOptions) => {
       const result = createAxiosInstance(pluginOptions, endpointOptions)
       app.config.globalProperties[result.internalName] = result.instance

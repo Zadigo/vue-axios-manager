@@ -32,7 +32,7 @@ Domain to use in a producton context
 
 Path used to generated an access token
 
-`refreshEnpoint`
+`refreshEndpoint`
 
 Path used to generated an refresh token
 

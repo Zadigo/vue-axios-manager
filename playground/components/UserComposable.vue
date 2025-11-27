@@ -8,12 +8,12 @@
 </template>
 
 <script setup lang="ts">
-import { useAccessToken, useUser } from '../../src/lib/composables'
+import { useAuthenticationTokens, useUser } from '../../src/lib/composables'
 
 /**
  * A simple component to test useUser and useAccessToken composables
  */
 
-const { access } = useAccessToken()
+const { access } = useAuthenticationTokens()
 const { id } = useUser<{ user_id: string }>('user_id')
 </script>

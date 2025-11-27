@@ -50,7 +50,7 @@ export function createVueAxiosManager(options: PluginOptions): Plugin {
       })
 
       if (!inProduction()) {
-        // window.VueAxiosManager = vueAxiosManager
+        window.VueAxiosManager = vueAxiosManager
         // setupAxiosManagerDevtools(app)
       }
     }
