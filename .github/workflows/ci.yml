@@ -1,4 +1,4 @@
-name: VueAiosManager CI
+name: VueAxiosManager CI
 
 on:
   push:
